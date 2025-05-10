@@ -1,0 +1,697 @@
+[
+  {
+    "CodePage": 437,
+    "identifier": "IBM437",
+    "WindowsCodePage": "1252*"
+  },
+  {
+    "CodePage": 500,
+    "identifier": "IBM500",
+    "WindowsCodePage": "1252*"
+  },
+  {
+    "CodePage": 708,
+    "identifier": "ASMO-708",
+    "WindowsCodePage": "1256*"
+  },
+  {
+    "CodePage": 720,
+    "identifier": "DOS-720",
+    "WindowsCodePage": "1256*"
+  },
+  {
+    "CodePage": 737,
+    "identifier": "ibm737",
+    "WindowsCodePage": "1253*"
+  },
+  {
+    "CodePage": 775,
+    "identifier": "ibm775",
+    "WindowsCodePage": "1257*"
+  },
+  {
+    "CodePage": 850,
+    "identifier": "ibm850",
+    "WindowsCodePage": "1252*"
+  },
+  {
+    "CodePage": 852,
+    "identifier": "ibm852",
+    "WindowsCodePage": "1250*"
+  },
+  {
+    "CodePage": 855,
+    "identifier": "IBM855",
+    "WindowsCodePage": "1252*"
+  },
+  {
+    "CodePage": 857,
+    "identifier": "ibm857",
+    "WindowsCodePage": "1254*"
+  },
+  {
+    "CodePage": 858,
+    "identifier": "IBM00858",
+    "WindowsCodePage": "1252*"
+  },
+  {
+    "CodePage": 860,
+    "identifier": "IBM860",
+    "WindowsCodePage": "1252*"
+  },
+  {
+    "CodePage": 861,
+    "identifier": "ibm861",
+    "WindowsCodePage": "1252*"
+  },
+  {
+    "CodePage": 862,
+    "identifier": "DOS-862",
+    "WindowsCodePage": "1255*"
+  },
+  {
+    "CodePage": 863,
+    "identifier": "IBM863",
+    "WindowsCodePage": "1252*"
+  },
+  {
+    "CodePage": 864,
+    "identifier": "IBM864",
+    "WindowsCodePage": "1256*"
+  },
+  {
+    "CodePage": 865,
+    "identifier": "IBM865",
+    "WindowsCodePage": "1252*"
+  },
+  {
+    "CodePage": 866,
+    "identifier": "cp866",
+    "WindowsCodePage": "1251*"
+  },
+  {
+    "CodePage": 869,
+    "identifier": "ibm869",
+    "WindowsCodePage": "1253*"
+  },
+  {
+    "CodePage": 870,
+    "identifier": "IBM870",
+    "WindowsCodePage": "1250*"
+  },
+  {
+    "CodePage": 874,
+    "identifier": "windows-874",
+    "WindowsCodePage": "874"
+  },
+  {
+    "CodePage": 875,
+    "identifier": "cp875",
+    "WindowsCodePage": "1253*"
+  },
+  {
+    "CodePage": 932,
+    "identifier": "shift_jis",
+    "WindowsCodePage": "932"
+  },
+  {
+    "CodePage": 936,
+    "identifier": "gb2312",
+    "WindowsCodePage": "936"
+  },
+  {
+    "CodePage": 949,
+    "identifier": "ks_c_5601-1987",
+    "WindowsCodePage": "949"
+  },
+  {
+    "CodePage": 950,
+    "identifier": "big5",
+    "WindowsCodePage": "950"
+  },
+  {
+    "CodePage": 1026,
+    "identifier": "IBM1026",
+    "WindowsCodePage": "1254*"
+  },
+  {
+    "CodePage": 1047,
+    "identifier": "IBM01047",
+    "WindowsCodePage": "1252*"
+  },
+  {
+    "CodePage": 1140,
+    "identifier": "IBM01140",
+    "WindowsCodePage": "1252*"
+  },
+  {
+    "CodePage": 1141,
+    "identifier": "IBM01141",
+    "WindowsCodePage": "1252*"
+  },
+  {
+    "CodePage": 1142,
+    "identifier": "IBM01142",
+    "WindowsCodePage": "1252*"
+  },
+  {
+    "CodePage": 1143,
+    "identifier": "IBM01143",
+    "WindowsCodePage": "1252*"
+  },
+  {
+    "CodePage": 1144,
+    "identifier": "IBM01144",
+    "WindowsCodePage": "1252*"
+  },
+  {
+    "CodePage": 1145,
+    "identifier": "IBM01145",
+    "WindowsCodePage": "1252*"
+  },
+  {
+    "CodePage": 1146,
+    "identifier": "IBM01146",
+    "WindowsCodePage": "1252*"
+  },
+  {
+    "CodePage": 1147,
+    "identifier": "IBM01147",
+    "WindowsCodePage": "1252*"
+  },
+  {
+    "CodePage": 1148,
+    "identifier": "IBM01148",
+    "WindowsCodePage": "1252*"
+  },
+  {
+    "CodePage": 1149,
+    "identifier": "IBM01149",
+    "WindowsCodePage": "1252*"
+  },
+  {
+    "CodePage": 1200,
+    "identifier": "utf-16",
+    "WindowsCodePage": "1200"
+  },
+  {
+    "CodePage": 1201,
+    "identifier": "unicodeFFFE",
+    "WindowsCodePage": "1200*"
+  },
+  {
+    "CodePage": 1250,
+    "identifier": "windows-1250",
+    "WindowsCodePage": "1250"
+  },
+  {
+    "CodePage": 1251,
+    "identifier": "windows-1251",
+    "WindowsCodePage": "1251"
+  },
+  {
+    "CodePage": 1252,
+    "identifier": "Windows-1252",
+    "WindowsCodePage": "1252"
+  },
+  {
+    "CodePage": 1253,
+    "identifier": "windows-1253",
+    "WindowsCodePage": "1253"
+  },
+  {
+    "CodePage": 1254,
+    "identifier": "windows-1254",
+    "WindowsCodePage": "1254"
+  },
+  {
+    "CodePage": 1255,
+    "identifier": "windows-1255",
+    "WindowsCodePage": "1255"
+  },
+  {
+    "CodePage": 1256,
+    "identifier": "windows-1256",
+    "WindowsCodePage": "1256"
+  },
+  {
+    "CodePage": 1257,
+    "identifier": "windows-1257",
+    "WindowsCodePage": "1257"
+  },
+  {
+    "CodePage": 1258,
+    "identifier": "windows-1258",
+    "WindowsCodePage": "1258"
+  },
+  {
+    "CodePage": 1361,
+    "identifier": "Johab",
+    "WindowsCodePage": "949*"
+  },
+  {
+    "CodePage": 10000,
+    "identifier": "macintosh",
+    "WindowsCodePage": "1252*"
+  },
+  {
+    "CodePage": 10001,
+    "identifier": "x-mac-japanese",
+    "WindowsCodePage": "932*"
+  },
+  {
+    "CodePage": 10002,
+    "identifier": "x-mac-chinesetrad",
+    "WindowsCodePage": "950*"
+  },
+  {
+    "CodePage": 10003,
+    "identifier": "x-mac-korean",
+    "WindowsCodePage": "949*"
+  },
+  {
+    "CodePage": 10004,
+    "identifier": "x-mac-arabic",
+    "WindowsCodePage": "1256*"
+  },
+  {
+    "CodePage": 10005,
+    "identifier": "x-mac-hebrew",
+    "WindowsCodePage": "1255*"
+  },
+  {
+    "CodePage": 10006,
+    "identifier": "x-mac-greek",
+    "WindowsCodePage": "1253*"
+  },
+  {
+    "CodePage": 10007,
+    "identifier": "x-mac-cyrillic",
+    "WindowsCodePage": "1251*"
+  },
+  {
+    "CodePage": 10008,
+    "identifier": "x-mac-chinesesimp",
+    "WindowsCodePage": "936*"
+  },
+  {
+    "CodePage": 10010,
+    "identifier": "x-mac-romanian",
+    "WindowsCodePage": "1250*"
+  },
+  {
+    "CodePage": 10017,
+    "identifier": "x-mac-ukrainian",
+    "WindowsCodePage": "1251*"
+  },
+  {
+    "CodePage": 10021,
+    "identifier": "x-mac-thai",
+    "WindowsCodePage": "874*"
+  },
+  {
+    "CodePage": 10029,
+    "identifier": "x-mac-ce",
+    "WindowsCodePage": "1250*"
+  },
+  {
+    "CodePage": 10079,
+    "identifier": "x-mac-icelandic",
+    "WindowsCodePage": "1252*"
+  },
+  {
+    "CodePage": 10081,
+    "identifier": "x-mac-turkish",
+    "WindowsCodePage": "1254*"
+  },
+  {
+    "CodePage": 10082,
+    "identifier": "x-mac-croatian",
+    "WindowsCodePage": "1250*"
+  },
+  {
+    "CodePage": 12000,
+    "identifier": "utf-32",
+    "WindowsCodePage": "1200*"
+  },
+  {
+    "CodePage": 12001,
+    "identifier": "utf-32BE",
+    "WindowsCodePage": "1200*"
+  },
+  {
+    "CodePage": 20000,
+    "identifier": "x-Chinese-CNS",
+    "WindowsCodePage": "950*"
+  },
+  {
+    "CodePage": 20001,
+    "identifier": "x-cp20001",
+    "WindowsCodePage": "950*"
+  },
+  {
+    "CodePage": 20002,
+    "identifier": "x-Chinese-Eten",
+    "WindowsCodePage": "950*"
+  },
+  {
+    "CodePage": 20003,
+    "identifier": "x-cp20003",
+    "WindowsCodePage": "950*"
+  },
+  {
+    "CodePage": 20004,
+    "identifier": "x-cp20004",
+    "WindowsCodePage": "950*"
+  },
+  {
+    "CodePage": 20005,
+    "identifier": "x-cp20005",
+    "WindowsCodePage": "950*"
+  },
+  {
+    "CodePage": 20105,
+    "identifier": "x-IA5",
+    "WindowsCodePage": "1252*"
+  },
+  {
+    "CodePage": 20106,
+    "identifier": "x-IA5-German",
+    "WindowsCodePage": "1252*"
+  },
+  {
+    "CodePage": 20107,
+    "identifier": "x-IA5-Swedish",
+    "WindowsCodePage": "1252*"
+  },
+  {
+    "CodePage": 20108,
+    "identifier": "x-IA5-Norwegian",
+    "WindowsCodePage": "1252*"
+  },
+  {
+    "CodePage": 20127,
+    "identifier": "us-ascii",
+    "WindowsCodePage": "1252*"
+  },
+  {
+    "CodePage": 20261,
+    "identifier": "x-cp20261",
+    "WindowsCodePage": "1252*"
+  },
+  {
+    "CodePage": 20269,
+    "identifier": "x-cp20269",
+    "WindowsCodePage": "1252*"
+  },
+  {
+    "CodePage": 20273,
+    "identifier": "IBM273",
+    "WindowsCodePage": "1252*"
+  },
+  {
+    "CodePage": 20277,
+    "identifier": "IBM277",
+    "WindowsCodePage": "1252*"
+  },
+  {
+    "CodePage": 20278,
+    "identifier": "IBM278",
+    "WindowsCodePage": "1252*"
+  },
+  {
+    "CodePage": 20280,
+    "identifier": "IBM280",
+    "WindowsCodePage": "1252*"
+  },
+  {
+    "CodePage": 20284,
+    "identifier": "IBM284",
+    "WindowsCodePage": "1252*"
+  },
+  {
+    "CodePage": 20285,
+    "identifier": "IBM285",
+    "WindowsCodePage": "1252*"
+  },
+  {
+    "CodePage": 20290,
+    "identifier": "IBM290",
+    "WindowsCodePage": "932*"
+  },
+  {
+    "CodePage": 20297,
+    "identifier": "IBM297",
+    "WindowsCodePage": "1252*"
+  },
+  {
+    "CodePage": 20420,
+    "identifier": "IBM420",
+    "WindowsCodePage": "1256*"
+  },
+  {
+    "CodePage": 20423,
+    "identifier": "IBM423",
+    "WindowsCodePage": "1253*"
+  },
+  {
+    "CodePage": 20424,
+    "identifier": "IBM424",
+    "WindowsCodePage": "1255*"
+  },
+  {
+    "CodePage": 20833,
+    "identifier": "x-EBCDIC-KoreanExtended",
+    "WindowsCodePage": "949*"
+  },
+  {
+    "CodePage": 20838,
+    "identifier": "IBM-Thai",
+    "WindowsCodePage": "874*"
+  },
+  {
+    "CodePage": 20866,
+    "identifier": "koi8-r",
+    "WindowsCodePage": "1251*"
+  },
+  {
+    "CodePage": 20871,
+    "identifier": "IBM871",
+    "WindowsCodePage": "1252*"
+  },
+  {
+    "CodePage": 20880,
+    "identifier": "IBM880",
+    "WindowsCodePage": "1251*"
+  },
+  {
+    "CodePage": 20905,
+    "identifier": "IBM905",
+    "WindowsCodePage": "1254*"
+  },
+  {
+    "CodePage": 20924,
+    "identifier": "IBM00924",
+    "WindowsCodePage": "1252*"
+  },
+  {
+    "CodePage": 20932,
+    "identifier": "EUC-JP",
+    "WindowsCodePage": "932*"
+  },
+  {
+    "CodePage": 20936,
+    "identifier": "x-cp20936",
+    "WindowsCodePage": "936*"
+  },
+  {
+    "CodePage": 20949,
+    "identifier": "x-cp20949",
+    "WindowsCodePage": "949*"
+  },
+  {
+    "CodePage": 21025,
+    "identifier": "cp1025",
+    "WindowsCodePage": "1251*"
+  },
+  {
+    "CodePage": 21866,
+    "identifier": "koi8-u",
+    "WindowsCodePage": "1251*"
+  },
+  {
+    "CodePage": 28591,
+    "identifier": "iso-8859-1",
+    "WindowsCodePage": "1252*"
+  },
+  {
+    "CodePage": 28592,
+    "identifier": "iso-8859-2",
+    "WindowsCodePage": "1250*"
+  },
+  {
+    "CodePage": 28593,
+    "identifier": "iso-8859-3",
+    "WindowsCodePage": "1254*"
+  },
+  {
+    "CodePage": 28594,
+    "identifier": "iso-8859-4",
+    "WindowsCodePage": "1257*"
+  },
+  {
+    "CodePage": 28595,
+    "identifier": "iso-8859-5",
+    "WindowsCodePage": "1251*"
+  },
+  {
+    "CodePage": 28596,
+    "identifier": "iso-8859-6",
+    "WindowsCodePage": "1256*"
+  },
+  {
+    "CodePage": 28597,
+    "identifier": "iso-8859-7",
+    "WindowsCodePage": "1253*"
+  },
+  {
+    "CodePage": 28598,
+    "identifier": "iso-8859-8",
+    "WindowsCodePage": "1255*"
+  },
+  {
+    "CodePage": 28599,
+    "identifier": "iso-8859-9",
+    "WindowsCodePage": "1254*"
+  },
+  {
+    "CodePage": 28603,
+    "identifier": "iso-8859-13",
+    "WindowsCodePage": "1257*"
+  },
+  {
+    "CodePage": 28605,
+    "identifier": "iso-8859-15",
+    "WindowsCodePage": "1252*"
+  },
+  {
+    "CodePage": 29001,
+    "identifier": "x-Europa",
+    "WindowsCodePage": "1252*"
+  },
+  {
+    "CodePage": 38598,
+    "identifier": "iso-8859-8-i",
+    "WindowsCodePage": "1255*"
+  },
+  {
+    "CodePage": 50220,
+    "identifier": "iso-2022-jp",
+    "WindowsCodePage": "932*"
+  },
+  {
+    "CodePage": 50221,
+    "identifier": "csISO2022JP",
+    "WindowsCodePage": "932*"
+  },
+  {
+    "CodePage": 50222,
+    "identifier": "iso-2022-jp",
+    "WindowsCodePage": "932*"
+  },
+  {
+    "CodePage": 50225,
+    "identifier": "iso-2022-kr",
+    "WindowsCodePage": "949*"
+  },
+  {
+    "CodePage": 50227,
+    "identifier": "x-cp50227",
+    "WindowsCodePage": "936*"
+  },
+  {
+    "CodePage": 51932,
+    "identifier": "euc-jp",
+    "WindowsCodePage": "932*"
+  },
+  {
+    "CodePage": 51936,
+    "identifier": "EUC-CN",
+    "WindowsCodePage": "936*"
+  },
+  {
+    "CodePage": 51949,
+    "identifier": "euc-kr",
+    "WindowsCodePage": "949*"
+  },
+  {
+    "CodePage": 52936,
+    "identifier": "hz-gb-2312",
+    "WindowsCodePage": "936*"
+  },
+  {
+    "CodePage": 54936,
+    "identifier": "GB18030",
+    "WindowsCodePage": "936*"
+  },
+  {
+    "CodePage": 57002,
+    "identifier": "x-iscii-de",
+    "WindowsCodePage": "57002"
+  },
+  {
+    "CodePage": 57003,
+    "identifier": "x-iscii-be",
+    "WindowsCodePage": "57003"
+  },
+  {
+    "CodePage": 57004,
+    "identifier": "x-iscii-ta",
+    "WindowsCodePage": "57004"
+  },
+  {
+    "CodePage": 57005,
+    "identifier": "x-iscii-te",
+    "WindowsCodePage": "57005"
+  },
+  {
+    "CodePage": 57006,
+    "identifier": "x-iscii-as",
+    "WindowsCodePage": "57006"
+  },
+  {
+    "CodePage": 57007,
+    "identifier": "x-iscii-or",
+    "WindowsCodePage": "57007"
+  },
+  {
+    "CodePage": 57008,
+    "identifier": "x-iscii-ka",
+    "WindowsCodePage": "57008"
+  },
+  {
+    "CodePage": 57009,
+    "identifier": "x-iscii-ma",
+    "WindowsCodePage": "57009"
+  },
+  {
+    "CodePage": 57010,
+    "identifier": "x-iscii-gu",
+    "WindowsCodePage": "57010"
+  },
+  {
+    "CodePage": 57011,
+    "identifier": "x-iscii-pa",
+    "WindowsCodePage": "57011"
+  },
+  {
+    "CodePage": 65000,
+    "identifier": "utf-7",
+    "WindowsCodePage": "1200*"
+  },
+  {
+    "CodePage": 65001,
+    "identifier": "utf-8",
+    "WindowsCodePage": "1200*"
+  }
+]
