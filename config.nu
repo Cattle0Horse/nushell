@@ -20,9 +20,9 @@ def mc --env [folder: string] : nothing -> nothing { mkdir $folder; cd $folder }
 
 # using
 use git *
-use bilibili *
 use backup *
 
+use bilibili
 use kimi
 use link
 use chcp
