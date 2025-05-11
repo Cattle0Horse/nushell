@@ -1,4 +1,3 @@
-# 模块内部使用的工具方法，便于脚本处理
 # todo: 类型注释
 
 export def git_current_branch [] {

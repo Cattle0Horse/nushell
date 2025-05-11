@@ -1,4 +1,5 @@
 文档：https://platform.moonshot.cn/docs/api/chat
+处理流式输出：https://platform.moonshot.cn/docs/guide/utilize-the-streaming-output-feature-of-kimi-api#%E5%9C%A8%E4%B8%8D%E4%BD%BF%E7%94%A8-sdk-%E7%9A%84%E5%9C%BA%E5%90%88%E4%B8%8B%E5%A6%82%E4%BD%95%E5%A4%84%E7%90%86%E6%B5%81%E5%BC%8F%E8%BE%93%E5%87%BA
 
 ## 预设提示词
 

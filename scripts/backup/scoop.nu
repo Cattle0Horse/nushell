@@ -1,4 +1,4 @@
-use mod_utils.nu *
+use internal.nu *
 
 # 备份 scoop 应用列表
 export def "backup scoop" [date?: string] : nothing -> nothing {

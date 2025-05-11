@@ -1,4 +1,4 @@
-use mod_utils.nu *
+use internal.nu *
 
 def "nu-complete profile-name-list" [] : nothing -> list<string> {
   # todo: await VSCode API

@@ -1,4 +1,4 @@
-use mod_utils.nu *
+use internal.nu *
 
 def "nu-complete obsidian-projects" [] : nothing -> list<string> {
   ls --short-names $env.OBSIDIAN_ROOT | get name
