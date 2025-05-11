@@ -6,3 +6,4 @@ export-env {
 export use scoop.nu *
 export use vscode.nu *
 export use winget.nu *
+export use obsidian.nu *
