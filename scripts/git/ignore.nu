@@ -3,29 +3,21 @@
 #   # todo:
 # }
 
+const IGNORE_INIT_CONTENT = '# Ignore everything in this directory
+*
+# Except this file
+!.gitignore
+'
+
 # 添加忽略方案到.gitignore
-# export def "git ignore add" [
-#   object: string # 忽略方案
-# ] : nothing -> nothing {
-#   let f = ignore-path
-#   mut s: string = ''
-#   if ($f | path exists) {
-#     let content = open $f
-#     if not ($content | is-empty) and not ($content | str ends-with (char newline)) {
-#       $s += (char newline)
-#     }
-#   }
-#   $s += $object + (char newline)
-#   $s | save -a $f
-# }
 export def "git ignore add" [
   object: string # 忽略方案
 ] : nothing -> nothing {
   let f = ignore-path
   let s: string = if ($f | path exists) {
     let content = open $f
-    if not ($content | is-empty) and not ($content | str ends-with (char newline)) {
-       (char newline)
+    if (not ($content | is-empty) and not ($content | str ends-with (char newline))) {
+      (char newline)
     } else {
       ''
     }
@@ -35,15 +27,11 @@ export def "git ignore add" [
   ($s + $object + (char newline)) | save -a $f
 }
 
-
 # 初始化.gitignore
 export def "git ignore init" [
-  # --force(-f) # 若已经存在则覆盖
-] {
-  let f = ignore-path
-  if not ($f | path exists) {
-    touch $f
-  }
+  --force(-f) # 若已经存在则覆盖
+] : nothing -> nothing {
+  $IGNORE_INIT_CONTENT | save --force=$force (ignore-path)
 }
 
 # 编辑.gitignore
