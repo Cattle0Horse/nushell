@@ -21,9 +21,9 @@ export def "backup vscode extensions" [
   let profile_name = if $profile_name != null { $profile_name } else if $in != null { $in } else { null }
 
   let extensions_str: string = if $profile_name == null {
-      ^code --list-extensions
+    ^code --list-extensions
   } else {
-      ^code --list-extensions --profile $profile_name
+    ^code --list-extensions --profile $profile_name
   }
 
   return ({ "recommendations": ($extensions_str | lines) } | to json --indent 2)
