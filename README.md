@@ -19,7 +19,7 @@
 ## 实用
 
 - https://www.nushell.sh/book/directory_stack.html
-- <Ctrl-R>：查看命令历史记录
+- `<Ctrl-R>`：查看命令历史记录
 
 ## 插件体系
 
