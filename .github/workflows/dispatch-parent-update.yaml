@@ -11,5 +11,5 @@ jobs:
         uses: peter-evans/repository-dispatch@v3
         with:
           token: ${{ secrets.PAT }}
-          repository: cattle0horse/dotfiles
+          repository: Cattle0Horse/dotfiles
           event-type: update-submodule
