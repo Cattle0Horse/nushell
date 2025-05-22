@@ -4,6 +4,7 @@ export use age.nu *
 export use branch_cleanup.nu *
 export use ignore.nu *
 export use utils.nu *
+export use remote_url.nu *
 
 
 # 管理本地 git 仓库，包括克隆、更新、删除等操作

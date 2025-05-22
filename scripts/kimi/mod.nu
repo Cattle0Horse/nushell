@@ -1,4 +1,4 @@
-# todo: 处理 "finish_reason":"length"
+# todo: 处理 "finish_reason":"length" https://platform.moonshot.cn/docs/guide/faq#kimi-api-%E8%BF%94%E5%9B%9E%E7%9A%84%E5%86%85%E5%AE%B9%E4%B8%8D%E5%AE%8C%E6%95%B4%E6%88%96%E8%A2%AB%E6%88%AA%E6%96%AD
 # todo: 为什么阻塞了？为什么没有流式输出
 
 use internal.nu *
