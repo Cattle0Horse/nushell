@@ -20,7 +20,7 @@
 
 - https://www.nushell.sh/book/directory_stack.html
 - `<Ctrl-R>`：查看命令历史记录
-- 反引号：解析第一个字符串为命令以及支持通配符模式 <https://www.nushell.sh/book/working_with_strings.html#backtick-quoted-strings>
+- 反引号：裸字符串无法包含空格和引号，反引号<code>`</code>用于帮助解析这种形式的命令和路径 <https://www.nushell.sh/book/working_with_strings.html#backtick-quoted-strings>
 - 可以在 `env.nu` 文件中设置 `$cenv` 常量，这样就可以在脚本文件中以常量的形式定义变量了。在 vscode 的语法解释时会报错，不过并不影响实际使用
 
 ## 插件体系
