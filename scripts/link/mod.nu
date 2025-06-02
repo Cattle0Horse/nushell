@@ -7,14 +7,14 @@ def is-dir [] : path -> bool {
 
 # 符号链接
 export def main [
-  src: path # 源文件
-  link: path # 链接位置
+  source_file: path # 源文件
+  link: path # 生成的链接位置
   --symbol(-S) # 符号链接(默认)
   --directory(-D) # 目录链接
   --hard(-H) # 硬链接
 ] : nothing -> nothing {
-  if not ($src | path exists) {
-    print $"(ansi red)Error: ($src) is not found(ansi reset)"
+  if not ($source_file | path exists) {
+    print $"(ansi red)Error: ($source_file) is not found(ansi reset)"
     return
   }
   if ($link | path exists) {
@@ -22,22 +22,22 @@ export def main [
     return
   }
   if $hard {
-    if ($src | is-dir) {
+    if ($source_file | is-dir) {
       print $"(ansi red)Error: can't create hard link for folder(ansi reset)"
       return
     }
-    ^mklink /H $link $src
+    ^mklink /H $link $source_file
   } else if $directory {
-    if not ($src | is-dir) {
+    if not ($source_file | is-dir) {
       print $"(ansi red)Error: You should not create directory link for file(ansi reset)"
       return
     }
-    ^mklink /J $link $src
+    ^mklink /J $link $source_file
   } else {
-    if ($src | is-dir) {
-      ^mklink /D $link $src
+    if ($source_file | is-dir) {
+      ^mklink /D $link $source_file
     } else {
-      ^mklink $link $src
+      ^mklink $link $source_file
     }
   }
 }
