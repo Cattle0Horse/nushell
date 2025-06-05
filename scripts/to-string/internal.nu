@@ -47,7 +47,7 @@ export def "record-to-string" [
     if ($rows | is-empty) {
       $'{(char newline)}'
     } else {
-      use std repeat
+      use std/util repeat
       let indent_str = ((char newline) + ((char space) | repeat $indent | str join))
       let data_str = ($rows | str join ($indent_str))
       $'{($indent_str)($data_str)(char newline)}'
