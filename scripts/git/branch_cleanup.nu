@@ -1,5 +1,5 @@
 # 在本地设置 branch-cleanup.keep 为要保留的分支模式的空格分隔列表
-# git config --local --add branch-cleanup.keep 'releases/.*'
+# ^git config --local --add branch-cleanup.keep 'releases/.*'
 
 # 删除本地（和远程）已合并的分支
 export def "git branch-cleanup" [
@@ -18,9 +18,11 @@ export def "git branch-cleanup" [
   # 修剪过时的远程跟踪分支。这些是曾经跟踪但现在远程已删除的分支
   ^git remote prune $upstream
 
+  # 提示用户是否删除不再位于远程仓库中的本地分支
+
+
   # 删除已完全合并到默认分支的本地分支
-  list_merged $upstream $default_branch $keep
-  | each {|branch|
+  list_merged $upstream $default_branch $keep | each {|branch|
     delete_local $branch
   }
 
@@ -29,14 +31,10 @@ export def "git branch-cleanup" [
 
   if ( $merged_on_remote | is-not-empty ) {
     print "以下远程分支已完全合并，将被删除："
-
-    $merged_on_remote | each {||
-      print $"\t($in)"
-    }
-
+    $merged_on_remote | each {|| print $"\t($in)" }
     print ""
 
-    if ( input --suppress-output "继续(y/N)? " | str trim ) == "y" {
+    if ( input --default 'N' "继续(y/N)? " | str trim ) == 'y' {
       $merged_on_remote | each {|branch|
         delete_remote $upstream $branch
       }
@@ -48,9 +46,7 @@ export def "git branch-cleanup" [
 
 # 当前分支名称
 def current_branch [] {
-  ^git branch --show-current |
-    into string |
-    str trim
+  ^git branch --show-current | into string | str trim
 }
 
 # 删除一个本地分支
@@ -72,9 +68,7 @@ def delete_remote [
 def get_default_branch [
   upstream: string # 目标仓库
 ] {
-  ^git symbolic-ref --short $upstream |
-    str trim |
-    path basename
+  ^git symbolic-ref --short $upstream | str trim | path basename
 }
 
 # 获取本地需保留的分支列表
@@ -85,10 +79,7 @@ def get_keep [] {
     return []
   }
 
-  $keep |
-    str trim |
-    split column " " |
-    get column1
+  $keep | str trim | split column " " | get column1
 }
 
 # 获取所有已合并到默认分支的本地分支（使用远程默认分支以防止本地默认分支过时）

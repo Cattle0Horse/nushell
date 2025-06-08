@@ -1,4 +1,3 @@
-
 # 提供变量转化为nushell可定义的字符串的方法
 
 # table 转换为 string

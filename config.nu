@@ -13,12 +13,8 @@ $env.config.buffer_editor = "code"
 # 终端使用 utf-8 字符集
 do { ^chcp 65001 } | ignore
 
-# alias
-alias cc = code
-def mc --env [folder: string] : nothing -> nothing { mkdir $folder; cd $folder }
+# alias 应该在 complete 之后，否则补全不会应用与 alias 的命令
 
-
-# using
 use git *
 use backup *
 use filesystem *
@@ -33,5 +29,13 @@ use completions/scoop/scoop_zh.nu *
 use completions/git/git_zh.nu *
 use completions/docker/docker_zh.nu *
 
+# use completions/whisper-ctranslate2/whisper-ctranslate2_zh.nu *
+# alias whisper = whisper-ctranslate2
+
 # use completions/eza/eza_zh.nu *
 # use eza
+
+
+alias cc = code
+# 创建并进入文件夹
+def mc --env [folder: string] : nothing -> nothing { mkdir $folder; cd $folder }
