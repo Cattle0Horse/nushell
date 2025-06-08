@@ -1,4 +1,3 @@
-
 export-env {
   if ('GIT_URL_PARSE_PATTERNS' not-in $env) {
     # 默认提供一些简单解析方式

@@ -1,10 +1,17 @@
-# git/remote_url.nu
-# 获取远程仓库的 URL
-export def "git remote-url" [] : nothing -> string {
+
+#获取仓库位置（远程仓库或本地仓库）
+export def --env "git path" [
+  --local # 获取本地仓库位置
+  --remote:string="origin" # 获取远程仓库位置
+] : nothing -> string {
+  if $local {
+    return (^git rev-parse --show-toplevel)
+  }
+
   # 获取远程 URL
-  let result = do {git remote get-url origin} | complete
+  let result = do {^git remote get-url $remote} | complete
   if $result.exit_code != 0 {
-    print $"(ansi red) ($result.stderr) (ansi reset)"
+    print $"(ansi red)($result.stderr)(ansi reset)"
     return
   }
 

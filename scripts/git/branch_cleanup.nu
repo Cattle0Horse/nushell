@@ -118,11 +118,11 @@ def list_merged [
 }
 
 def remotes [] {
-  ^git remote -v |
-    parse "{value}\t{description} ({operation})" |
-    select value description |
-    uniq |
-    sort
+  ^git remote -v
+    | parse "{value}\t{description} ({operation})"
+    | select value description
+    | uniq
+    | sort
 }
 
 # 切换到不同分支

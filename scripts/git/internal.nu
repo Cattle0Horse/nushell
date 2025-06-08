@@ -1,5 +1,10 @@
 # todo: 类型注释
 
+# 获取当前仓库的根目录
+export def git-root [] {
+  ^git rev-parse --show-toplevel
+}
+
 export def git-current-branch [] {
   ^git rev-parse --abbrev-ref HEAD
 }
