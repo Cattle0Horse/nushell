@@ -4,11 +4,10 @@ export use age.nu *
 export use branch_cleanup.nu *
 export use ignore.nu *
 export use url.nu *
-export use path.nu *
+export use utils.nu *
 
 export-env {
   export use url.nu
-  export use path.nu
 }
 
 

@@ -38,13 +38,14 @@ export def "git ignore init" [
 export def "git ignore edit" [
   --global
 ] {
-  ^($env.config.buffer_editor) (ignore-path)
+  ^($env.config.buffer_editor) (ignore-path --global=$global)
 }
 
 # 获取.gitignore文件路径(可能不存在)
 def ignore-path [--global] : nothing -> path {
   if $global {
-    ~/.gitignore
+    # '~/.gitignore'
+    [$nu.home-path .config git ignore] | path join
   } else {
     $"(^git rev-parse --show-toplevel)/.gitignore"
   }
