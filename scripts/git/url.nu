@@ -1,4 +1,4 @@
-use complete.nu *
+use internal.nu *
 
 export-env {
   if ('GIT_URL_PARSE_PATTERNS' not-in $env) {
@@ -51,7 +51,7 @@ export def "git url parse" [] : [
 # 获取追踪的远程仓库的 URL
 @example "Get remote URL" { git url remote } --result "https://github.com/nushell/nushell"
 export def "git url remote" [
-  repo: string@"nu-complete git remotes"="origin"
+  repo: string@git-remotes = "origin"
 ] : nothing -> string {
   # 获取远程 URL
   let result = do {^git remote get-url $repo} | complete
@@ -62,14 +62,11 @@ export def "git url remote" [
 
   let remote_url = $result.stdout | str trim
 
-  # 转换为 HTTP 格式
-  let http_url = if ($remote_url =~ "https://") {
+  if ($remote_url =~ "https://") {
     $remote_url | str replace -r '\.git$' ''
   } else if ($remote_url =~ "git@") {
     ('https://' + ($remote_url | str substring ('git@' | str length).. | str replace ':' '/' | str replace -r '\.git$' ''))
   } else {
     "Unsupported URL type"
   }
-
-  $http_url
 }

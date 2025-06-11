@@ -112,7 +112,7 @@ def list_merged [
       $branch,
     ])
 
-  ^git branch ...$args | lines | filter {|branch|
+  ^git branch ...$args | lines | where {|branch|
       $keep | all {|pattern| $branch !~ $'\A($pattern)\z' }
   }
 }
