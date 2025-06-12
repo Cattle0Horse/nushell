@@ -4,7 +4,7 @@ export def git-root [] : nothing -> string {
 }
 
 export def git-current-branch [] : nothing -> string {
-  ^git branch --show-current
+  ^git branch --no-color --show-current
   # ^git rev-parse --abbrev-ref HEAD
 }
 
@@ -47,7 +47,7 @@ export def git-local-branches [] : nothing -> list<string> {
 
 # 获取远程分支
 export def git-remote-branches [] : nothing -> list<string> {
-  ^git branch  --no-color -r | lines | str trim | where {|x| not ($x | str starts-with 'origin/HEAD') }
+  ^git branch --no-color -r | lines | str trim | where {|x| not ($x | str starts-with 'origin/HEAD') }
 }
 
 # 获取远程仓库
