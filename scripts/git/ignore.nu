@@ -29,16 +29,26 @@ export def "git ignore add" [
 
 # 初始化.gitignore
 export def "git ignore init" [
+  path?: path # 指定路径，如果没有则会使用仓库根目录
   --force(-f) # 若已经存在则覆盖
 ] : nothing -> nothing {
-  $IGNORE_INIT_CONTENT | save --force=$force (ignore-path)
+  if ($path | is-empty) {
+    $IGNORE_INIT_CONTENT | save --force=$force (ignore-path)
+  } else {
+    $IGNORE_INIT_CONTENT | save --force=$force ([$path '.gitignore'] | path join)
+  }
 }
 
 # 编辑.gitignore
 export def "git ignore edit" [
+  path?: path # 指定路径，如果没有则会使用仓库根目录
   --global
 ] {
-  ^($env.config.buffer_editor) (ignore-path --global=$global)
+  if ($path | is-empty) {
+    ^($env.config.buffer_editor) (ignore-path --global=$global)
+  } else {
+    ^($env.config.buffer_editor) ([$path '.gitignore'] | path join)
+  }
 }
 
 # 获取.gitignore文件路径(可能不存在)
