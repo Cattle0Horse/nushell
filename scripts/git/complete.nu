@@ -39,10 +39,10 @@ export def cmpl-git-remote-branches [] : nothing -> list<string> {
 # 获取远程仓库
 export def cmpl-git-remotes [] : nothing -> table<value: string, description: string> {
   ^git remote -v
-    | parse "{value}\t{description} ({operation})"
-    | select value description
-    | uniq
-    | sort
+  | parse "{value}\t{description} ({operation})"
+  | select value description
+  | uniq
+  | sort
 }
 
 # 获取远程仓库

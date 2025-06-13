@@ -70,10 +70,10 @@ export def git-merged-local-branches [
   let branch = $in
   let exclude = $exclude | append [ $branch ]
   ^git for-each-ref --format='%(refname:short)' refs/heads/ --no-color --merged $branch
-    | lines
-    | where {|b|
-      $exclude | all {|pattern| $b !~ $pattern }
-    }
+  | lines
+  | where {|b|
+    $exclude | all {|pattern| $b !~ $pattern }
+  }
 }
 
 # 获取所有已合并到branch的远程分支
