@@ -23,7 +23,7 @@ export def cmpl-git-branch-files [context: string, offset:int] {
 
 # 获取本地分支
 export def cmpl-git-local-branches [] : nothing -> list<string> {
-  ^git branch --no-color | lines | each { str substring 2.. | str trim }
+  ^git for-each-ref --no-color --format='%(refname:short)' $'refs/heads/'
 }
 
 # 获取本地分支（不包含当前分支）
@@ -33,7 +33,12 @@ export def cmpl-git-local-branches-no-current [] : nothing -> list<string> {
 
 # 获取远程分支
 export def cmpl-git-remote-branches [] : nothing -> list<string> {
-  ^git branch  --no-color -r | lines | str trim | where {|x| not ($x | str starts-with 'origin/HEAD') }
+  ^git for-each-ref --no-color --format='%(refname:short)' $'refs/remotes/'
+}
+
+# 获取所有分支（本地和远程）
+export def cmpl-git-branches [] : nothing -> list<string> {
+  ^git for-each-ref --no-color --format='%(refname:short)' refs/heads/ refs/remotes/
 }
 
 # 获取远程仓库
@@ -53,4 +58,13 @@ export def cmpl-git-remotes [] : nothing -> table<value: string, description: st
 # 获取所有提交的作者
 export def cmpl-git-authors [] : nothing -> list<string> {
   ^git log --format='%aN' | lines | str trim | uniq
+}
+
+# 获取所有提交的邮箱
+export def cmpl-git-emails [] : nothing -> list<string> {
+  ^git log --format='%aE' | lines | str trim | uniq
+}
+
+export def cmpl-interval [] : nothing -> list<string> {
+  [hour day month year]
 }
