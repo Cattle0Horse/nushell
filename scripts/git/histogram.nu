@@ -8,12 +8,12 @@
 # 核心处理函数
 def git-histogram-core [
   group: record  # 分组字段配置
-  branch?: string # 指定范围如（main、main..dev）若不指定则默认使用HEAD
-  files?: list<string> # 指定文件或目录，支持通配符（如*.md）
-  all?: bool # 遍历 refs/
-  merges?: bool # 仅统计合并提交
-  no_merges?: bool # 仅统计非合并提交
-  date_format?: string # 日期格式
+  --branch(-b): string # 指定范围如（main、main..dev）若不指定则默认使用HEAD
+  --files(-f): list<string> # 指定文件或目录，支持通配符（如*.md）
+  --all(-a) # 遍历 refs/
+  --merges(-m) # 仅统计合并提交
+  --no-merges(-n) # 仅统计非合并提交
+  --date-format(-d): string # 日期格式
 ] : nothing -> table {
   let sep = '»¦«'
   mut args = ['-s' '--no-color']
@@ -55,7 +55,7 @@ export def "git histogram project" [
   }
   if $email { $group = $group | insert email '%aE' }
 
-  git-histogram-core $group $branch $files $all $merges $no_merges
+  git-histogram-core $group --branch=$branch --files=$files --all=$all --merges=$merges --no-merges=$no_merges
 }
 
 # 一个作者的提交活动统计（将会按日期分，不会显示邮箱）
@@ -71,7 +71,7 @@ export def "git histogram author" [
     date: "%ad"
   }
 
-  git-histogram-core $group $branch $files $all $merges $no_merges 'short'
+  git-histogram-core $group --branch=$branch --files=$files --all=$all --merges=$merges --no-merges=$no_merges --date-format='short'
 }
 
 # 一个作者的提交活动统计（将会按日期分）
@@ -88,5 +88,5 @@ export def "git histogram email" [
     date: "%ad"
   }
 
-  git-histogram-core $group $branch $files $all $merges $no_merges 'short'
+  git-histogram-core $group --branch=$branch --files=$files --all=$all --merges=$merges --no-merges=$no_merges --date-format='short'
 }
