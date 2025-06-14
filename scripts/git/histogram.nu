@@ -27,7 +27,7 @@ def frequency [--width(-w): int] {
 
 # 按指定列作为数据，生成百分比及直方图
 def histogram-column [
-  column: string  # 指定列名
+  column: string     # 指定列名
   --len(-l):int = 50 # 直方图最大宽度
 ] {
   let o = $in
@@ -43,16 +43,16 @@ def histogram-column [
 
 # 核心处理函数
 def git-histogram-core [
-  group: record  # 分组字段配置
-  --range: string  # 指定范围如（main、main..dev）若不指定则默认使用HEAD
-  --author: string # 筛选指定作者名
-  --email: string # 筛选指定邮箱
+  group: record         # 分组字段配置
+  --range: string       # 指定范围如（main、main..dev）若不指定则默认使用HEAD
+  --author: string      # 筛选指定作者名
+  --email: string       # 筛选指定邮箱
   --date-format: string # 日期格式
-  --interval: string # 按周期统计（将会覆盖--date-format）
+  --interval: string    # 按周期统计（将会覆盖--date-format）
   --files: list<string> # 统计指定的文件或目录，支持通配符（如*.md）
-  --merges   # 仅统计合并提交
-  --no-merges # 仅统计非合并提交
-  --all # 遍历 refs/
+  --merges              # 仅统计合并提交
+  --no-merges           # 仅统计非合并提交
+  --all                 # 遍历 refs/
 ] : nothing -> table {
   let sep = '»¦«'
 
@@ -104,15 +104,15 @@ def git-histogram-core [
 
 # 分组活动统计，持按email、author、interval、自定义日期及其任意组合分组
 export def "git-histogram" [
-  ...files: string # 统计指定的文件或目录，支持通配符（如*.md）
-  --range(-r): string@cmpl-git-branches  # 指定范围如（main、main..dev）若不指定则默认使用HEAD
-  --author(-a) # 作者名
-  --email(-e) # 邮箱
-  --date-format(-d): string # 日期格式
-  --interval(-i): string@cmpl-interval # 按周期统计（将会覆盖--date-format）
-  --merges(-m)   # 仅统计合并提交
-  --no-merges(-M) # 仅统计非合并提交
-  --all # 遍历 refs/
+  ...files: string                      # 统计指定的文件或目录，支持通配符（如*.md）
+  --range(-r): string@cmpl-git-branches # 指定范围如（main、main..dev）若不指定则默认使用HEAD
+  --author(-a)                          # 作者名
+  --email(-e)                           # 邮箱
+  --date-format(-d): string             # 日期格式
+  --interval(-i): string@cmpl-interval  # 按周期统计（将会覆盖--date-format）
+  --merges(-m)                          # 仅统计合并提交
+  --no-merges(-M)                       # 仅统计非合并提交
+  --all                                 # 遍历 refs/
 ] : nothing -> table {
   mut group: record = {}
   if $author { $group = $group | insert 'author' '%aN' }
@@ -122,14 +122,14 @@ export def "git-histogram" [
 
 # 统计指定作者的提交
 export def "git-histogram-author" [
-  author: string@cmpl-git-authors  # 作者名称
-  ...files: string # 指定文件或目录，支持通配符（如*.md）
-  --range(-r): string@cmpl-git-branches  # 指定范围如（main、main..dev）若不指定则默认使用HEAD
-  --date-format(-d): string # 日期格式
-  --interval(-i): string@cmpl-interval # 按统计周期（将会覆盖--date-format）
-  --merges(-m)   # 仅统计合并提交
-  --no-merges(-M) # 仅统计非合并提交
-  --all # 遍历 refs/
+  author: string@cmpl-git-authors       # 作者名称
+  ...files: string                      # 指定文件或目录，支持通配符（如*.md）
+  --range(-r): string@cmpl-git-branches # 指定范围如（main、main..dev）若不指定则默认使用HEAD
+  --date-format(-d): string             # 日期格式
+  --interval(-i): string@cmpl-interval  # 按统计周期（将会覆盖--date-format）
+  --merges(-m)                          # 仅统计合并提交
+  --no-merges(-M)                       # 仅统计非合并提交
+  --all                                 # 遍历 refs/
 ] : nothing -> table {
   let group = { author: "%aN" }
   git-histogram-core $group --author=$author --files=$files --range=$range --date-format=$date_format --interval=$interval --merges=$merges --no-merges=$no_merges --all=$all
@@ -137,14 +137,14 @@ export def "git-histogram-author" [
 
 # 统计指定邮箱的活动
 export def "git-histogram-email" [
-  email: string@cmpl-git-emails  # 作者邮箱
-  ...files: string # 指定文件或目录，支持通配符（如*.md）
-  --range(-r): string@cmpl-git-branches  # 指定范围如（main、main..dev）若不指定则默认使用HEAD
-  --date-format(-d): string # 日期格式
-  --interval(-i): string@cmpl-interval # 按统计周期（将会覆盖--date-format）
-  --merges(-m)   # 仅统计合并提交
-  --no-merges(-M) # 仅统计非合并提交
-  --all # 遍历 refs/
+  email: string@cmpl-git-emails         # 作者邮箱
+  ...files: string                      # 指定文件或目录，支持通配符（如*.md）
+  --range(-r): string@cmpl-git-branches # 指定范围如（main、main..dev）若不指定则默认使用HEAD
+  --date-format(-d): string             # 日期格式
+  --interval(-i): string@cmpl-interval  # 按统计周期（将会覆盖--date-format）
+  --merges(-m)                          # 仅统计合并提交
+  --no-merges(-M)                       # 仅统计非合并提交
+  --all                                 # 遍历 refs/
 ] : nothing -> table {
   let group = { email: "%aE" }
   git-histogram-core $group --email=$email --files=$files --range=$range --date-format=$date_format --interval=$interval --merges=$merges --no-merges=$no_merges --all=$all
