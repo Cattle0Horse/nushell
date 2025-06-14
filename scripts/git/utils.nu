@@ -5,6 +5,7 @@ export def git-root [] : nothing -> string {
   ^git rev-parse --show-toplevel
 }
 
+# 获取当前分支名称
 export def git-current-branch [] : nothing -> string {
   # ^git branch --no-color --show-current
   ^git rev-parse --abbrev-ref HEAD

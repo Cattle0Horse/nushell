@@ -54,13 +54,7 @@ export def git-url-remote [
   repo: string@git-remotes = "origin"
 ] : nothing -> string {
   # 获取远程 URL
-  let result = do {^git remote get-url $repo} | complete
-  if $result.exit_code != 0 {
-    print $"(ansi red)($result.stderr)(ansi reset)"
-    return
-  }
-
-  let remote_url = $result.stdout | str trim
+  let remote_url = ^git remote get-url $repo | str trim
 
   if ($remote_url =~ "https://") {
     $remote_url | str replace -r '\.git$' ''

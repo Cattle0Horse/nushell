@@ -19,9 +19,11 @@ export def "backup obsidian" [
   if ($password | is-not-empty) { $args = $args | append  $password }
 
   let input_file = ($env.OBSIDIAN_ROOT | path join $project)
-  mut output_file_name = $"obsidian-($project)-(current-date).7z"
-  if ($output | is-not-empty) {
-    $output_file_name = $output | path join $output_file_name
+  let output_file_name = $"obsidian-($project)-(current-date).7z"
+  let output_file_name = if ($output | is-not-empty) {
+    $output | path join $output_file_name
+  } else {
+    $output_file_name
   }
 
   ^7z a $output_file_name $input_file ...$args
