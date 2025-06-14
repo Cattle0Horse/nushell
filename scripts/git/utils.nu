@@ -23,12 +23,12 @@ export def git-unstaged-changes [] : nothing -> list<string> {
 
 # 获取当前分支的上游（远程跟踪）分支
 export def git-upstream-branch []: nothing -> string {
-  ^git rev-parse --abbrev-ref @{u}
+  ^git rev-parse --abbrev-ref @{upstream}
 }
 
 # 获取未推送的 commit's hash
 export def git-has-unpushed-changes [] : nothing -> list<string> {
-  ^git rev-list @{u}.. | lines
+  ^git rev-list @{upstream}.. | lines
 }
 
 # 判断是当前目录是否在git仓库中
