@@ -30,6 +30,9 @@ def histogram-column [
   column: string     # 指定列名
   --len(-l):int = 50 # 直方图最大宽度
 ] {
+  if ($in | is-empty) {
+    return
+  }
   let o = $in
   let total = $o | get $column | math sum
   let max = $o | get $column | math max | ($in / $total)
