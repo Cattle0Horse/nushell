@@ -1,4 +1,4 @@
-use internal.nu *
+use utils.nu *
 
 export-env {
   if ('GIT_URL_PARSE_PATTERNS' not-in $env) {

@@ -1,4 +1,4 @@
-use internal.nu *
+use utils.nu *
 use complete.nu *
 
 export-env {
