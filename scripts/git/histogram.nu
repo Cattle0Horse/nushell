@@ -16,6 +16,31 @@ def interval-to-date-format [] : string -> string {
   }
 }
 
+def precent [] {
+  ($in * 10000 | math round) / 100
+}
+
+def frequency [--width(-w): int] {
+  let o = $in
+  '' | fill -c '*' -w ($o * $width | math round)
+}
+
+# 按指定列作为数据，生成百分比及直方图
+def histogram-column [
+  column: string  # 指定列名
+  --len(-l):int = 50 # 直方图最大宽度
+] {
+  let o = $in
+  let total = $o | get $column | math sum
+  let max = $o | get $column | math max | ($in / $total)
+  $o | each {|x|
+    let c = $x | get $column | $in / $total
+    $x
+    | insert precent $"($c | precent)%"
+    | insert frequency ($c / $max | frequency --width $len)
+  }
+}
+
 # 核心处理函数
 def git-histogram-core [
   group: record  # 分组字段配置
@@ -67,19 +92,20 @@ def git-histogram-core [
   ^git shortlog ...$args
   | lines
   | str trim
-  | parse "{number}\t{value}"
+  | parse "{count}\t{value}"
   | each {|it|
     $it.value
     | split column $sep ...($group | get key)
-    | upsert number ($it.number | into int)
+    | upsert count ($it.count | into int)
     | get 0
   }
+  | histogram-column count
 }
 
 # 分组活动统计，持按email、author、interval、自定义日期及其任意组合分组
 export def "git-histogram" [
   ...files: string # 统计指定的文件或目录，支持通配符（如*.md）
-  --range: string@cmpl-git-branches  # 指定范围如（main、main..dev）若不指定则默认使用HEAD
+  --range(-r): string@cmpl-git-branches  # 指定范围如（main、main..dev）若不指定则默认使用HEAD
   --author(-a) # 作者名
   --email(-e) # 邮箱
   --date-format(-d): string # 日期格式
@@ -89,8 +115,8 @@ export def "git-histogram" [
   --all # 遍历 refs/
 ] : nothing -> table {
   mut group: record = {}
-  if ($author | is-not-empty) { $group = $group | insert 'author' '%aN' }
-  if ($email | is-not-empty) { $group = $group | insert 'email' '%aE' }
+  if $author { $group = $group | insert 'author' '%aN' }
+  if $email { $group = $group | insert 'email' '%aE' }
   git-histogram-core $group --files=$files --range=$range --date-format=$date_format --interval=$interval --merges=$merges --no-merges=$no_merges --all=$all
 }
 

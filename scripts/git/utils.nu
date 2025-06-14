@@ -55,6 +55,7 @@ export def git-emails [] : nothing -> list<string> {
   ^git log --no-color --format='%aE' | lines | str trim | uniq
 }
 
+# 获取本地分支
 export def git-local-branches [] : nothing -> list<string> {
   ^git for-each-ref --no-color --format='%(refname:short)' refs/heads/
 }
