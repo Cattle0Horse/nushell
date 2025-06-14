@@ -14,6 +14,8 @@ def git-histogram-core [
   --merges(-m) # 仅统计合并提交
   --no-merges(-n) # 仅统计非合并提交
   --date-format(-d): string # 日期格式
+  --author: string # 按作者名称过滤
+  --email: string # 按邮箱过滤
 ] : nothing -> table {
   let sep = '»¦«'
   mut args = ['-s' '--no-color']
@@ -22,6 +24,8 @@ def git-histogram-core [
   if $no_merges { $args ++= ['--no-merges'] }
   if $all { $args ++= ['--all'] }
   if ($date_format | is-not-empty) { $args ++= [$'--date=($date_format)'] }
+  if ($author | is-not-empty) { $args ++= [$'--author=($author)'] }
+  if ($email | is-not-empty) { $args ++= [$'--author=<($email)>'] }
 
   let group = $group | transpose key value
   $args ++= [$'--group=format:($group | get value | str join $sep)']
@@ -50,16 +54,23 @@ export def "git histogram project" [
   --merges   # 仅统计合并提交
   --no-merges # 仅统计非合并提交
 ] : nothing -> table {
-  mut group = {
-    author: "%aN"
+  let group = if $email {
+    {
+      author: "%aN",
+      email: "%aE"
+    }
+  } else {
+    {
+      author: "%aN"
+    }
   }
-  if $email { $group = $group | insert email '%aE' }
 
   git-histogram-core $group --branch=$branch --files=$files --all=$all --merges=$merges --no-merges=$no_merges
 }
 
 # 一个作者的提交活动统计（将会按日期分，不会显示邮箱）
 export def "git histogram author" [
+  author: string  # 作者名称
   branch?: string # 指定范围如（main、main..dev）若不指定则默认使用HEAD
   --files: list<string> # 指定文件或目录，支持通配符（如*.md）
   --all(-a) # 遍历 refs/
@@ -71,11 +82,12 @@ export def "git histogram author" [
     date: "%ad"
   }
 
-  git-histogram-core $group --branch=$branch --files=$files --all=$all --merges=$merges --no-merges=$no_merges --date-format='short'
+  git-histogram-core $group --author=$author --branch=$branch --files=$files --all=$all --merges=$merges --no-merges=$no_merges --date-format='short'
 }
 
 # 一个作者的提交活动统计（将会按日期分）
 export def "git histogram email" [
+  email: string  # 作者邮箱
   branch?: string # 指定范围如（main、main..dev）若不指定则默认使用HEAD
   --files: list<string> # 指定文件或目录，支持通配符（如*.md）
   --all(-a) # 遍历 refs/
@@ -88,5 +100,5 @@ export def "git histogram email" [
     date: "%ad"
   }
 
-  git-histogram-core $group --branch=$branch --files=$files --all=$all --merges=$merges --no-merges=$no_merges --date-format='short'
+  git-histogram-core $group --email=$email --branch=$branch --files=$files --all=$all --merges=$merges --no-merges=$no_merges --date-format='short'
 }
