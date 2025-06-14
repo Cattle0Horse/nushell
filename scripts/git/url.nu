@@ -21,12 +21,12 @@ export-env {
 }
 
 # 解析url中的git仓库
-@example "Parse a GitHub URL with blob path" { "https://github.com/nushell/nushell/blob/main/crates/nu-std/std/iter/mod.nu" | git url parse } --result { owner: "nushell", repo: "nushell", source: "github-https" }
-@example "Parse a GitHub URL with .git extension" { "https://github.com/nushell/nushell.git" | git url parse } --result { owner: "nushell", repo: "nushell", source: "github-https" }
-@example "Parse a GitHub URL with SSH format" { "git@github.com:nushell/nushell.git" | git url parse } --result { owner: "nushell", repo: "nushell", source: "github-ssh" }
-@example "Parse a GitHub URL without protocol" { "nushell/nushell" | git url parse } --result { owner: "nushell", repo: "nushell", source: "short" }
-@example "Invalid URL" { "invalid-url" | git url parse } --result null
-export def "git url parse" [] : [
+@example "Parse a GitHub URL with blob path" { "https://github.com/nushell/nushell/blob/main/crates/nu-std/std/iter/mod.nu" | git-url-parse } --result { owner: "nushell", repo: "nushell", source: "github-https" }
+@example "Parse a GitHub URL with .git extension" { "https://github.com/nushell/nushell.git" | git-url-parse } --result { owner: "nushell", repo: "nushell", source: "github-https" }
+@example "Parse a GitHub URL with SSH format" { "git@github.com:nushell/nushell.git" | git-url-parse } --result { owner: "nushell", repo: "nushell", source: "github-ssh" }
+@example "Parse a GitHub URL without protocol" { "nushell/nushell" | git-url-parse } --result { owner: "nushell", repo: "nushell", source: "short" }
+@example "Invalid URL" { "invalid-url" | git-url-parse } --result null
+export def git-url-parse [] : [
   string -> record<owner: string, repo: string, source: string>
   string -> nothing
 ] {
@@ -49,8 +49,8 @@ export def "git url parse" [] : [
 }
 
 # 获取追踪的远程仓库的 URL
-@example "Get remote URL" { git url remote } --result "https://github.com/nushell/nushell"
-export def "git url remote" [
+@example "Get remote URL" { git-url-remote } --result "https://github.com/nushell/nushell"
+export def git-url-remote [
   repo: string@git-remotes = "origin"
 ] : nothing -> string {
   # 获取远程 URL

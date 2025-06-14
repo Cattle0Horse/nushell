@@ -10,7 +10,7 @@ const IGNORE_INIT_CONTENT = '# Ignore everything in this directory
 '
 
 # 添加忽略方案到.gitignore
-export def "git ignore add" [
+export def git-ignore-add [
   object: string # 忽略方案
 ] : nothing -> nothing {
   let f = ignore-path
@@ -28,7 +28,7 @@ export def "git ignore add" [
 }
 
 # 初始化.gitignore
-export def "git ignore init" [
+export def git-ignore-init [
   path?: path # 指定路径，如果没有则会使用仓库根目录
   --force(-f) # 若已经存在则覆盖
 ] : nothing -> nothing {
@@ -40,7 +40,7 @@ export def "git ignore init" [
 }
 
 # 编辑.gitignore
-export def "git ignore edit" [
+export def git-ignore-edit [
   path?: path # 指定路径，如果没有则会使用仓库根目录
   --global
 ] {

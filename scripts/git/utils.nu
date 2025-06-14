@@ -1,6 +1,5 @@
 # 对于b的已合并的分支是指那些最后提交节点在b之前或当前的分支，即b是他们的延申
 
-
 # 获取当前仓库的根目录
 export def git-root [] : nothing -> string {
   ^git rev-parse --show-toplevel
@@ -59,10 +58,17 @@ export def git-emails [] : nothing -> list<string> {
 export def git-local-branches [] : nothing -> list<string> {
   ^git for-each-ref --no-color --format='%(refname:short)' refs/heads/
 }
-
 # 获取远程分支
-export def git-remote-branches [upstream: string="origin"] : nothing -> list<string> {
-  ^git for-each-ref --no-color --format='%(refname:short)' $'refs/remotes/($upstream)/' --exclude $'refs/remotes/($upstream)/HEAD'
+export def git-remote-branches [
+  upstream: string="origin"
+  --all(-a)
+] : nothing -> list<string> {
+  if $all {
+    ^git for-each-ref --no-color --format='%(refname:short)' $'refs/remotes/'
+  } else {
+    ^git for-each-ref --no-color --format='%(refname:short)' $'refs/remotes/($upstream)/'
+    # ^git for-each-ref --no-color --format='%(refname:short)' $'refs/remotes/($upstream)/' --exclude $'refs/remotes/($upstream)/HEAD'
+  }
 }
 
 # 获取git路径下的引用信息（管道in为引用目录路径，如refs/heads、refs/remotes/origin）
