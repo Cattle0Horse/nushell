@@ -1,3 +1,6 @@
+# 对于b的已合并的分支是指那些最后提交节点在b之前或当前的分支，即b是他们的延申
+
+
 # 获取当前仓库的根目录
 export def git-root [] : nothing -> string {
   ^git rev-parse --show-toplevel
@@ -40,17 +43,21 @@ export def git-remotes [] : nothing -> list<string> {
 
 # 获取默认分支名称
 export def git-main-branch [ upstream: string="origin" ] : nothing -> string {
-  ^git symbolic-ref --short -q $'refs/remotes/($upstream)/HEAD' | split row '/' -n 2 | last
+  ^git symbolic-ref --short --quiet $'refs/remotes/($upstream)/HEAD' | split row '/' -n 2 | last
 }
 
 # 获取所有提交的作者
 export def git-authors [] : nothing -> list<string> {
-  ^git log --format='%aN' | lines | str trim | uniq
+  ^git log --no-color --format='%aN' | lines | str trim | uniq
+}
+
+# 获取所有提交的邮箱
+export def git-emails [] : nothing -> list<string> {
+  ^git log --no-color --format='%aE' | lines | str trim | uniq
 }
 
 export def git-local-branches [] : nothing -> list<string> {
   ^git for-each-ref --no-color --format='%(refname:short)' refs/heads/
-  # ^git branch --no-color | lines | each { |line| $line | str replace '* ' "" | str replace '+ ' ""  | str trim }
 }
 
 # 获取远程分支
@@ -58,54 +65,39 @@ export def git-remote-branches [upstream: string="origin"] : nothing -> list<str
   ^git for-each-ref --no-color --format='%(refname:short)' $'refs/remotes/($upstream)/' --exclude $'refs/remotes/($upstream)/HEAD'
 }
 
-# 对于b的已合并的分支是指那些最后提交节点在b之前或当前的分支，即b是他们的延申
-
-# 获取所有已合并到branch的本地分支
-export def git-merged-local-branches [
-  --exclude: list<string> # 要保留的模式列表（如["release/*"]）
-] : string -> list<string> {
-  if ($in | is-empty) {
-    return []
-  }
-  let branch = $in
-  let exclude = $exclude | append [ $branch ]
-  ^git for-each-ref --format='%(refname:short)' refs/heads/ --no-color --merged $branch
-  | lines
-  | where {|b|
-    $exclude | all {|pattern| $b !~ $pattern }
-  }
-}
-
-# 获取所有已合并到branch的远程分支
-# export def git-merged-remote-branches [
-#   upstream: string   # 上游仓库
-#   branch: string     # 分支
-#   --exclude: list<string> # 要保留的模式列表。默认会添加默认分支和 HEAD
-# ] : nothing -> list<string> {
-#   let args = [ "--list" "--merged" $"($upstream)/($branch)" ] ++ if $remote {
-#       [ '--format' '%(refname:lstrip=3)' '--remote' ]
-#     } else {
-#       [ '--format' '%(refname:lstrip=2)' ]
-#     }
-
-#   let keep = ( $keep | append [ "HEAD" $branch ])
-
-#   ^git branch ...$args | lines | where {|branch|
-#     $keep | all {|pattern| $branch !~ $pattern }
-#   }
-# }
-
 # 获取git路径下的引用信息（管道in为引用目录路径，如refs/heads、refs/remotes/origin）
-export def git-refs-message [
-  parser: record # 解析对象，格式为{key: value}，key为nushell变量名，value为git标识名，例如{ref: '%(refname:short)'}
-  --exclude: list<string> # 要排除的模式列表
+def git-refs-message [
+  parser: record              # 解析对象，格式为{key: value}，key为nushell变量名，value为git标识名，例如{ref: '%(refname:short)'}
+  --exclude(-e): list<string> # 要排除的模式列表
+  --count(-n): int            # 限制输出数量
+  --merged(-m)                # 列出已合并到当前分支的分支
+  --mergedc(-M): string       # 列出已合并到指定分支的分支（对于--merged的补充，因为nushell不支持位置参数可选）
+  --no-merged(-d)             # 列出未合并到当前分支的分支
+  --no-mergedc(-D): string    # 列出未合并到指定分支的分支（对于--no-merged的补充，因为nushell不支持位置参数可选）
+  --contains(-c)              # 列出包含指定提交的分支
+  --containsc(-C): string     # 列出包含指定提交的分支（对于--contains的补充，因为nushell不支持位置参数可选）
+  --no-contains(-s)           # 列出不包含指定提交的分支
+  --no-containsc(-S): string  # 列出不包含指定提交的分支（对于--no-contains的补充，因为nushell不支持位置参数可选）
 ] : string -> table {
   let pt = $parser | transpose key value
-  let sep1 = "\u{1f}" # 使用ASCII unit separator，极低概率出现在git内容中
-  let sep2 = "\u{1e}" # 使用ASCII record separator，极低概率出现在git内容中
-  let exclude: list<string> = if ($exclude | is-empty) { [] } else { $exclude | each {|it| ["--exclude" $it]} | flatten }
+  let sep1 = "\u{1f}" # 使用ASCII unit separator，极低概率出现在git内容中（一个ref的内容分隔符）
+  let sep2 = "\u{1e}" # 使用ASCII record separator，极低概率出现在git内容中（多个refs的分隔符）
 
-  ^git for-each-ref ...$exclude --format (($pt | get value | str join $sep1) + $sep2) $in
+  mut args = ['--no-color']
+  if ($exclude | is-not-empty)      { $args ++= ($exclude | each {|it| ['--exclude' $it]} | flatten) }
+  if ($count | is-not-empty)        { $args ++= ['--count' $count] }
+  # note: 下面的参数理应至多只有一个，但这里不做复杂的判断了
+  if $merged      { $args ++= ['--merged'] }
+  if $no_merged   { $args ++= ['--no-merged'] }
+  if $contains    { $args ++= ['--contains'] }
+  if $no_contains { $args ++= ['--no-contains'] }
+
+  if ($mergedc | is-not-empty)      { $args ++= ['--merged' $mergedc] }
+  if ($no_mergedc | is-not-empty)   { $args ++= ['--no-merged' $no_mergedc] }
+  if ($containsc | is-not-empty)    { $args ++= ['--contains' $containsc] }
+  if ($no_containsc | is-not-empty) { $args ++= ['--no-contains' $no_containsc] }
+
+  ^git for-each-ref $in --format (($pt | get value | str join $sep1) + $sep2) ...$args
   | split row $sep2
   | where { is-not-empty }
   | str trim
@@ -113,7 +105,18 @@ export def git-refs-message [
 }
 
 # 获取所有本地分支引用信息
-export def git-local-branch-message []: nothing -> table {
+export def git-local-branch-message [
+  --exclude(-e): list<string> # 要排除的模式列表
+  --count(-n): int            # 限制输出数量
+  --merged(-m)                # 列出已合并到当前分支的分支
+  --mergedc(-M): string       # 列出已合并到指定分支的分支（对于--merged的补充，因为nushell不支持位置参数可选）
+  --no-merged(-d)             # 列出未合并到当前分支的分支
+  --no-mergedc(-D): string    # 列出未合并到指定分支的分支（对于--no-merged的补充，因为nushell不支持位置参数可选）
+  --contains(-c)              # 列出包含指定提交的分支
+  --containsc(-C): string     # 列出包含指定提交的分支（对于--contains的补充，因为nushell不支持位置参数可选）
+  --no-contains(-s)           # 列出不包含指定提交的分支
+  --no-containsc(-S): string  # 列出不包含指定提交的分支（对于--no-contains的补充，因为nushell不支持位置参数可选）
+]: nothing -> table {
   let ref_path = "refs/heads/"
 
   let parser = {
@@ -139,7 +142,10 @@ export def git-local-branch-message []: nothing -> table {
     br_up_branch:   '%(upstream:short)'
   }
 
-  $ref_path | git-refs-message $parser | each {|it|
+  let exclude = if ($exclude | is-empty) { [] } else { $exclude | each {|it| $ref_path + $it } }
+
+  $ref_path | git-refs-message $parser --exclude=$exclude --count=$count --merged=$merged --mergedc=$mergedc --no-merged=$no_merged --no-mergedc=$no_mergedc --contains=$contains --containsc=$containsc --no-contains=$no_contains --no-containsc=$no_containsc
+  | each {|it|
     {
       branch: $it.branch
       ref:    $it.ref
@@ -170,7 +176,19 @@ export def git-local-branch-message []: nothing -> table {
 }
 
 # 获取远程所有分支信息
-export def git-remote-branch-message [upstream: string="origin"]: nothing -> table {
+export def git-remote-branch-message [
+  upstream: string="origin"   # 上游仓库
+  --exclude(-e): list<string> # 要排除的模式列表
+  --count(-n): int            # 限制输出数量
+  --merged(-m)                # 列出已合并到当前分支的分支
+  --mergedc(-M): string       # 列出已合并到指定分支的分支（对于--merged的补充，因为nushell不支持位置参数可选）
+  --no-merged(-d)             # 列出未合并到当前分支的分支
+  --no-mergedc(-D): string    # 列出未合并到指定分支的分支（对于--no-merged的补充，因为nushell不支持位置参数可选）
+  --contains(-c)              # 列出包含指定提交的分支
+  --containsc(-C): string     # 列出包含指定提交的分支（对于--contains的补充，因为nushell不支持位置参数可选）
+  --no-contains(-s)           # 列出不包含指定提交的分支
+  --no-containsc(-S): string  # 列出不包含指定提交的分支（对于--no-contains的补充，因为nushell不支持位置参数可选）
+]: nothing -> table {
   let ref_path = $"refs/remotes/($upstream)/"
 
   let parser = {
@@ -193,7 +211,10 @@ export def git-remote-branch-message [upstream: string="origin"]: nothing -> tab
     msg_trailers:   '%(contents:trailers)'
   }
 
-  $ref_path | git-refs-message $parser --exclude [$'refs/remotes/($upstream)/HEAD'] | each {|it|
+  let exclude = $exclude | append 'HEAD' | each {|it| $ref_path + $it }
+
+  $ref_path | git-refs-message $parser --exclude=$exclude --count=$count --merged=$merged --mergedc=$mergedc --no-merged=$no_merged --no-mergedc=$no_mergedc --contains=$contains --containsc=$containsc --no-contains=$no_contains --no-containsc=$no_containsc
+  | each {|it|
     {
       branch: $it.branch
       ref:    $it.ref
