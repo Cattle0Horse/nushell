@@ -97,7 +97,7 @@ def git-histogram-core [
     $it.value
     | split column $sep ...($group | get key)
     | upsert count ($it.count | into int)
-    | get 0
+    | first
   }
   | histogram-column count
 }
