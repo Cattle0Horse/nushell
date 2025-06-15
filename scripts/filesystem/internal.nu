@@ -5,14 +5,17 @@ export def is-empty-dir [dir: path] : [nothing -> bool] {
 
 def __clear-empty-dir-recursion [
   dir: path
-  --verbose(-v) # 是否显示删除的目录
+  --verbose(-v) # 显示删除的目录
+  --dry-run(-n) # 试运行
 ] : [nothing -> bool] {
   ls -f $dir | where type == dir | get name | each {|it|
     if (__clear-empty-dir-recursion $it) {
       if $verbose {
         print $"deleted ($it)"
       }
-      rm $it
+      if not $dry_run {
+        rm $it
+      }
     }
   }
   return (is-empty-dir $dir)
@@ -21,9 +24,10 @@ def __clear-empty-dir-recursion [
 # 递归删除空目录（不会处理隐藏文件）
 export def clear-empty-dir-recursion [
   dir: path
-  --verbose(-v) # 是否显示删除的目录
+  --verbose(-v) # 显示删除的目录
+  --dry-run(-n) # 试运行
 ] : [nothing -> nothing] {
-  __clear-empty-dir-recursion --verbose=$verbose $dir | ignore
+  __clear-empty-dir-recursion --verbose=$verbose --dry-run=$dry_run $dir | ignore
 }
 
 # 获取目录下的空目录（非递归）
