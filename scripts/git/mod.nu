@@ -1,13 +1,12 @@
 # 实用的git实用函数的集合
 
-export use branch_cleanup.nu *
 export use ignore.nu *
+export use ignore-gen.nu *
 export use url.nu *
 export use utils.nu *
 export use histogram.nu *
 
 export-env {
-  export use branch_cleanup.nu
   export use url.nu
 }
 

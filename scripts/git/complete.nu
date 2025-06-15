@@ -23,7 +23,7 @@ export def cmpl-git-branch-files [context: string, offset:int] {
 
 # 获取本地分支
 export def cmpl-git-local-branches [] : nothing -> list<string> {
-  ^git for-each-ref --no-color --format='%(refname:short)' $'refs/heads/'
+  ^git for-each-ref --no-color --format='%(refname:short)' 'refs/heads/'
 }
 
 # 获取本地分支（不包含当前分支）
@@ -33,12 +33,21 @@ export def cmpl-git-local-branches-no-current [] : nothing -> list<string> {
 
 # 获取远程分支
 export def cmpl-git-remote-branches [] : nothing -> list<string> {
-  ^git for-each-ref --no-color --format='%(refname:short)' $'refs/remotes/'
+  ^git for-each-ref --no-color --format='%(refname:short)' 'refs/remotes/' | lines | str trim
 }
 
 # 获取所有分支（本地和远程）
 export def cmpl-git-branches [] : nothing -> list<string> {
-  ^git for-each-ref --no-color --format='%(refname:short)' refs/heads/ refs/remotes/
+  ^git for-each-ref --no-color --format='%(refname:short)' 'refs/heads/' 'refs/remotes/' | lines | str trim
+}
+
+# 获取所有分支（本地和远程）
+export def cmpl-git-short-refs [] : nothing -> list<string> {
+  ^git for-each-ref --no-color --format='%(refname:short)' 'refs/' | lines | str trim
+}
+
+export def cmpl-git-full-refs [] : nothing -> list<string> {
+  ^git for-each-ref --no-color --format='%(refname)' 'refs/' | lines | str trim
 }
 
 # 获取远程仓库
