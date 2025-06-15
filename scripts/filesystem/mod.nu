@@ -1,1 +1,1 @@
-export use clear_empty_dir.nu *
+export use dir_empy.nu *

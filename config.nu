@@ -18,6 +18,7 @@ do { ^chcp 65001 } | ignore
 use git *
 use backup *
 use filesystem *
+use str *
 
 use bilibili
 use bilibili/alias.nu *
@@ -26,7 +27,7 @@ use link
 use chcp
 
 use completions/scoop/scoop_zh.nu *
-# use completions/git/git_zh.nu *
+use completions/git/git_zh.nu *
 use completions/docker/docker_zh.nu *
 
 # use completions/whisper-ctranslate2/whisper-ctranslate2_zh.nu *
