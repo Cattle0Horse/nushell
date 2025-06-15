@@ -10,13 +10,12 @@ export def "backup obsidian" [
   --password(-p): string
   --output(-o): path
 ] {
-  mut args = [
+  let args = [
     "-t7z" # 使用 7z 格式
     "-mhe=on" # 加密文件名
     "-mx0" # 不压缩
-    "-p" # 下一个是密码，若未传输，则等待用户输入
+    if ($password | is-empty) { ["-p"] } else { [$"-p($password)"] }
   ]
-  if ($password | is-not-empty) { $args = $args | append  $password }
 
   let input_file = ($env.OBSIDIAN_ROOT | path join $project)
   let output_file_name = $"obsidian-($project)-(current-date).7z"
