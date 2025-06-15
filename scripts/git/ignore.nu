@@ -14,7 +14,7 @@ export def git-ignore-add [
   object: string # 忽略方案
 ] : nothing -> nothing {
   let f = ignore-path
-  let s: string = if ($f | path exists) {
+  if ($f | path exists) {
     let content = open $f
     if (not ($content | is-empty) and not ($content | str ends-with (char newline))) {
       (char newline)
@@ -24,7 +24,7 @@ export def git-ignore-add [
   } else {
     ''
   }
-  ($s + $object + (char newline)) | save -a $f
+  | ($in + $object + (char newline)) | save -a $f
 }
 
 # 初始化.gitignore
