@@ -15,9 +15,24 @@ const SYMBOL_RL = {
 const SYMBOL_LEFT = ['(' '[' '{' '<' ]
 const SYMBOL_RIGHT = [')' ']' '}' '>']
 
+def cmpl-symbols [] {
+  # note: 更换引号可能出现补全错误问题，这似乎是一个nushell的bug
+  [
+    '"("'
+    '")"'
+    '"{"'
+    '"}"'
+    "'['"
+    "']'"
+    "'<'"
+    "'>'"
+  ]
+}
+
+
 # 环绕字符串
 export def "str surround" [
-  symbols: string # 支持 ( [ { < ) ] } > 进行匹配，若无匹配则直接环绕
+  symbols: string@cmpl-symbols # 支持 ( [ { < ) ] } > 进行匹配，若无匹配则直接环绕
   --match(-m) # 必须匹配符号
   --no-match(-M) # 不要匹配符号
   --count(-n): int=1 # 重复次数
