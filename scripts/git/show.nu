@@ -1,3 +1,5 @@
+use complete.nu *
+
 def git-show-core [
   parser: record # 解析对象，格式为{key: value}，key为nushell变量名，value为git标识名
   ...objects: string # 要显示的对象名称（默认为HEAD）或范围（如：HEAD~5..HEAD）
@@ -24,7 +26,7 @@ def git-show-core [
 
 # 查询指定提交的详细信息
 export def git-show [
-  ...objects: string # 要显示的对象名称（默认为HEAD）或范围（如：HEAD~5..HEAD）
+  ...objects: string@cmpl-git-branches # 要显示的对象名称（默认为HEAD）或范围（如：HEAD~5..HEAD）
   --long(-l) # 显示详细信息
 ] {
   if $long {
