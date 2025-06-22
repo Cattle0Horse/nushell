@@ -12,7 +12,7 @@ def git-log-core [
   --skip: int  # 跳过前 N 个提交
   --grep: string  # 在提交消息中搜索
   --files: list<string>  # 只显示包含指定文件或目录的提交，支持通配符（如*.md）
-  --reverse  # 逆序显示提交（从旧到新）
+  --reverse  # 逆序显示提交（从新到旧）
   --date: string='iso' # 日期格式，默认为iso
 ] {
   let pt = $parser | transpose key value
@@ -29,7 +29,7 @@ def git-log-core [
   if ($count | is-not-empty) { $args ++= ['--max-count', $count] }
   if ($skip | is-not-empty) { $args ++= ['--skip', $skip] }
   if ($grep | is-not-empty) { $args ++= ['--grep', $grep] }
-  if $reverse { $args ++= ['--reverse'] }
+  if (not $reverse) { $args ++= ['--reverse'] } # 反转
 
   $args ++= $revision_range
   if ($files | is-not-empty) { $args ++= ['--', $files] }
