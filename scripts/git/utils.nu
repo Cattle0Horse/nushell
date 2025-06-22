@@ -165,10 +165,10 @@ export def git-local-branch-message [
       commit: {
         hash:     $it.obj_sha
         parents:  ($it.cm_parents | split row ' ')
-        contents: $it.msg_contents
-        subject:  $it.msg_subject
-        body:     $it.msg_body
-        trailers: $it.msg_trailers
+        contents: ($it.msg_contents | str trim)
+        subject:  ($it.msg_subject | str trim)
+        body:     ($it.msg_body | str trim)
+        trailers: ($it.msg_trailers | str trim)
       }
       author: {
         name:  $it.author_name
@@ -234,10 +234,10 @@ export def git-remote-branch-message [
       commit: {
         hash:     $it.obj_sha
         parents:  ($it.cm_parents | split row ' ')
-        contents: $it.msg_contents
-        subject:  $it.msg_subject
-        body:     $it.msg_body
-        trailers: $it.msg_trailers
+        contents: ($it.msg_contents | str trim)
+        subject:  ($it.msg_subject | str trim)
+        body:     ($it.msg_body | str trim)
+        trailers: ($it.msg_trailers | str trim)
       }
       author: {
         name:  $it.author_name
