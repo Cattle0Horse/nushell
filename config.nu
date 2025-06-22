@@ -19,6 +19,7 @@ use git *
 use backup *
 use filesystem *
 use str *
+use subtitle *
 
 use bilibili
 use bilibili/alias.nu *
@@ -38,5 +39,6 @@ use completions/docker/docker_zh.nu *
 
 
 alias cc = code
+alias 'to string' = to json
 # 创建并进入文件夹
 def mc --env [folder: string] : nothing -> nothing { mkdir $folder; cd $folder }
