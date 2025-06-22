@@ -5,6 +5,8 @@ export use ignore-gen.nu *
 export use url.nu *
 export use utils.nu *
 export use histogram.nu *
+export use log.nu *
+export use show.nu *
 
 export-env {
   export use url.nu

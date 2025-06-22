@@ -73,7 +73,3 @@ export def cmpl-git-authors [] : nothing -> list<string> {
 export def cmpl-git-emails [] : nothing -> list<string> {
   ^git log --format='%aE' | lines | str trim | uniq
 }
-
-export def cmpl-interval [] : nothing -> list<string> {
-  [hour day month year]
-}

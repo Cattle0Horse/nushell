@@ -6,6 +6,10 @@ use complete.nu *
 
 # todo: 增加统计一个时间区间内的提交
 
+export def cmpl-interval [] : nothing -> list<string> {
+  [hour day month year]
+}
+
 def interval-to-date-format [] : string -> string {
   match $in {
     'hour' => '%Y-%m-%d %H'
