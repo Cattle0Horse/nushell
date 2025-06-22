@@ -7,9 +7,11 @@ export use utils.nu *
 export use histogram.nu *
 export use log.nu *
 export use show.nu *
+export use commit.nu *
 
 export-env {
   export use url.nu
+  export use commit.nu
 }
 
 

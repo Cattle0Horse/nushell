@@ -1,6 +1,6 @@
 use complete.nu *
 
-export def cmpl-grep [] : nothing -> list<string> {
+def cmpl-grep [] : nothing -> list<string> {
   [feat fix docs style refactor perf test build ci revert chore misc]
 }
 
