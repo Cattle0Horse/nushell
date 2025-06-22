@@ -45,10 +45,28 @@ export def gen-headers [bvid: string, cookie: string] : [nothing -> list<string>
 
 # 将浮点时间转化为srt格式的时间字符串，比如 0:00:19.319
 export def float-to-srt [] : [float -> string] {
-  let hours: int = $in // 3600
-  let minutes: int = ($in - ($hours * 3600)) // 60
-  let seconds: int = $in - ($hours * 3600) - ($minutes * 60)
+  let hours: int = ($in // 3600) | into int
+  let minutes: int = ($in - ($hours * 3600)) // 60 | into int
+  let seconds: int = $in - ($hours * 3600) - ($minutes * 60) | into int
   let milliseconds: int  = ($in * 1000 | into int) - 1000 * (($hours * 3600) * 1000 + ($minutes * 60) + $seconds)
 
-  return $"($hours):($minutes | fill -a l -c 0 --width 2):($seconds | fill -a l -c 0 --width 2).($milliseconds | fill -a l -c 0 --width 3)"
+  $"($hours):($minutes | fill -a l -c 0 --width 2):($seconds | fill -a l -c 0 --width 2),($milliseconds | fill -a l -c 0 --width 3)"
+}
+
+# 解析字幕JSON转SRT格式
+export def convert-json-to-srt [] : [string -> string] {
+  $in | from json | get body | enumerate | reduce --fold '' {|it, acc|
+    $acc + ([
+        ($it.index + 1)
+        $"($it.item.from | seconds-to-srt-time) --> ($it.item.to | seconds-to-srt-time)"
+        $it.item.content
+      ]
+      | str join (char newline)
+    ) + (char newline) + (char newline)
+  }
+}
+
+# 解析字幕JSON转纯文本字幕
+export def convert-json-to-text [] : [string -> string] {
+  from json | get body | get content | str join (char newline)
 }

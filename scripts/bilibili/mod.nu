@@ -81,25 +81,5 @@ export def extract-bvid [] : [
   string -> string
   string -> nothing
 ] {
-  $in | parse -r '(BV[\dA-Za-z]{10})' | get capture0.0?
-}
-
-
-# 解析字幕JSON转SRT格式
-export def convert-json-to-srt [] : [string -> string] {
-  $in | from json | get body | enumerate | reduce --fold '' {|it, acc|
-    let start: string = $it.item.from | float-to-srt
-    let stop: string = $it.item.to | float-to-srt
-
-    let num: int = $it.index + 1
-    let time_line: string = $"($start) --> ($stop)"
-    let content: string = $it.item.content
-
-    $acc + ([$num $time_line $content] | str join (char newline)) + (char newline) + (char newline)
-  }
-}
-
-# 解析字幕JSON转纯文本字幕
-export def convert-json-to-text [] : [string -> string] {
-  $in | from json | get body | get content | str join (char newline)
+  parse -r '(BV[\dA-Za-z]{10})' | get capture0.0?
 }
