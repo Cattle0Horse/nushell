@@ -7,27 +7,33 @@ export-env {
       {
         name: "github-https"
         pattern: '(?:https://github\.com/)([^/]+)/([^/]+?)(?:\.git|/.*)?$'
+        domain: "github.com"
+        protocol: "https"
       }
       {
         name: "github-ssh"
         pattern: '(?:git@github\.com:)([^/]+)/([^/]+?)(?:\.git)?$'
+        domain: "github.com"
+        protocol: "ssh"
       }
       {
         name: "short"
         pattern: '^([^/]+)/([^/]+?)(?:\.git)?$'
+        domain: null
+        protocol: null
       }
     ]
   }
 }
 
 # 解析url中的git仓库
-@example "Parse a GitHub URL with blob path" { "https://github.com/nushell/nushell/blob/main/crates/nu-std/std/iter/mod.nu" | git-url-parse } --result { owner: "nushell", repo: "nushell", source: "github-https" }
-@example "Parse a GitHub URL with .git extension" { "https://github.com/nushell/nushell.git" | git-url-parse } --result { owner: "nushell", repo: "nushell", source: "github-https" }
-@example "Parse a GitHub URL with SSH format" { "git@github.com:nushell/nushell.git" | git-url-parse } --result { owner: "nushell", repo: "nushell", source: "github-ssh" }
-@example "Parse a GitHub URL without protocol" { "nushell/nushell" | git-url-parse } --result { owner: "nushell", repo: "nushell", source: "short" }
+@example "Parse a GitHub URL with blob path" { "https://github.com/nushell/nushell/blob/main/crates/nu-std/std/iter/mod.nu" | git-url-parse } --result { owner: "nushell", repo: "nushell", parser: { name: "github-https", pattern: '(?:https://github\.com/)([^/]+)/([^/]+?)(?:\.git|/.*)?$', domain: "github.com", protocol: "https" } }
+@example "Parse a GitHub URL with .git extension" { "https://github.com/nushell/nushell.git" | git-url-parse } --result { owner: "nushell", repo: "nushell", parser: { name: "github-https", pattern: '(?:https://github\.com/)([^/]+)/([^/]+?)(?:\.git|/.*)?$', domain: "github.com", protocol: "https" } }
+@example "Parse a GitHub URL with SSH format" { "git@github.com:nushell/nushell.git" | git-url-parse } --result { owner: "nushell", repo: "nushell", parser: { name: "github-ssh", pattern: '(?:git@github\.com:)([^/]+)/([^/]+?)(?:\.git)?$', domain: "github.com", protocol: "ssh" } }
+@example "Parse a GitHub URL without protocol" { "nushell/nushell" | git-url-parse } --result { owner: "nushell", repo: "nushell", parser: { name: "short", pattern: '^([^/]+)/([^/]+?)(?:\.git)?$', domain: null, protocol: null } }
 @example "Invalid URL" { "invalid-url" | git-url-parse } --result null
 export def git-url-parse [] : [
-  string -> record<owner: string, repo: string, source: string>
+  string -> record<owner: string, repo: string, parser: record<name: string, pattern: string, domain: string, protocol: string>>
   string -> nothing
 ] {
   # Try each pattern until we find a match
@@ -44,7 +50,7 @@ export def git-url-parse [] : [
   return {
     owner: ($parse_capture | get capture0.0)
     repo: ($parse_capture | get capture1.0)
-    source: $regex.name
+    parser: $regex
   }
 }
 
