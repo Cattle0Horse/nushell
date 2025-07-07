@@ -14,7 +14,7 @@ export def "backup obsidian" [
     "-t7z" # 使用 7z 格式
     "-mhe=on" # 加密文件名
     "-mx0" # 不压缩
-    if ($password | is-empty) { ["-p"] } else { [$"-p($password)"] }
+    (if ($password | is-empty) { "-p" } else { $"-p($password)" })
   ]
 
   let input_file = ($env.OBSIDIAN_ROOT | path join $project)
