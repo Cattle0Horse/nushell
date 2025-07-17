@@ -100,26 +100,25 @@ export def git-ignore-gen-list [
 # 生成指定语言的gitignore文件
 @example "Generate Python gitignore" { git-ignore-gen "Python" } --result "# Byte-compiled / optimized / DLL files\n__pycache__/\n*.py[cod]\n*$py.class\n\n# C extensions\n*.so\n\n# Distribution / packaging\n.Python\nbuild/\n..."
 @example "Generate to specific directory" { git-ignore-gen "Python" --output . }
-@example "Force overwrite existing file" { git-ignore-gen "Python" --force }
+@example "Force overwrite existing file" { git-ignore-gen "Python" --force --output . }
 export def git-ignore-gen [
   template: string@cmpl-ignore-gen-templates # Template name
-  --output(-o): path # Output file path
+  --output(-o): path # Output directory path
   --remote(-r) # Force fetch from remote
   --force(-f) # Overwrite existing file
 ] : [
   nothing -> string
   nothing -> nothing
 ] {
-  let output_file = if ($output | is-empty) { '.gitignore' } else { $output | path join '.gitignore' }
-
   let template_name = $template + ".gitignore"
 
-  print $"Generating ($template_name) to ($output_file)..."
+  print $"Generating ($template_name)"
 
   get-template-content $template_name --remote=$remote
   | if ($output | is-empty) {
     $in
   } else {
+    let output_file = if ($output | is-empty) { '.gitignore' } else { $output | path join '.gitignore' }
     $in | save --force=$force $output_file
     print $"Successfully generated ($output_file)"
   }
