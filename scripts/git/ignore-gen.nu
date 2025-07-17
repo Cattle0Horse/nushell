@@ -99,11 +99,11 @@ export def git-ignore-gen-list [
 
 # 生成指定语言的gitignore文件
 @example "Generate Python gitignore" { git-ignore-gen "Python" } --result "# Byte-compiled / optimized / DLL files\n__pycache__/\n*.py[cod]\n*$py.class\n\n# C extensions\n*.so\n\n# Distribution / packaging\n.Python\nbuild/\n..."
-@example "Generate to specific directory" { git-ignore-gen "Python" --output myproject }
+@example "Generate to specific directory" { git-ignore-gen "Python" --output . }
 @example "Force overwrite existing file" { git-ignore-gen "Python" --force }
 export def git-ignore-gen [
   template: string@cmpl-ignore-gen-templates # Template name
-  --output(-o): path # Output file path (default: .)
+  --output(-o): path # Output file path
   --remote(-r) # Force fetch from remote
   --force(-f) # Overwrite existing file
 ] : [
