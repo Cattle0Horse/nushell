@@ -1,78 +1,119 @@
-use utils.nu *
 use complete.nu *
 
 export-env {
   if 'GIT_BRANCH_CLEANUP_KEEP' not-in $env {
     # 每个仓库的要求不一样，可以写入仓库等级的 gitconfig 中，但仍应提供一个默认值，当仓库没有配置时，使用该默认值，并提示用户是否写入gitconfig
-    $env.GIT_BRANCH_CLEANUP_KEEP = ['release/*']
+    $env.GIT_REMOTE_BRANCH_CLEANUP_KEEP = ['release/*']
+    $env.GIT_LOCAL_BRANCH_CLEANUP_KEEP = []
   }
 }
 
-# 删除本地（和远程）已合并的分支
-export def "git branch-cleanup" [
+# 修剪远程分支（即 $'refs/remotes/($upstream)' 下的引用）
+export def git-remote-branch-cleanup [
   upstream: string@cmpl-git-remotes = "origin" # 上游远程仓库
+  --merge: string@cmpl-git-remote-branches # 修剪已完全merge的分支
+  # --keep: list<string> # 要保留的模式列表。若不指定，则使用 git config 中的值
 ] : nothing -> nothing {
-  let current_branch = git-current-branch
-  let default_branch = git-main-branch $upstream
-  let keep = $env.GIT_BRANCH_CLEANUP_KEEP
-
-  # 切换到默认分支
-  ^git switch --quiet --no-guess $default_branch
-
-  # 确保我们使用的是默认分支的最新版本
-  ^git fetch
-
-  # 修剪过时的远程跟踪分支。这些是曾经跟踪但现在远程已删除的分支
-  ^git remote prune $upstream
-
-  # todo: 提示用户是否删除不再位于远程仓库中的本地分支
-
-  # 删除已完全合并到默认分支的本地分支
-  list_merged $upstream $default_branch --keep $keep | each {|branch|
-    ^git branch --delete $branch
+  if ($merge | is-not-empty) and not ($merge starts-with $upstream) {
+    print $'(ansi red)远程分支名必须以 $upstream 开头，当前应为 ($upstream)(ansi reset)'
+    return
   }
 
-  # 再次处理远程分支
-  let merged_on_remote = list_merged $upstream $default_branch --remote --keep $keep
+  ^git fetch --prune $upstream
 
-  if ( $merged_on_remote | is-not-empty ) {
-    # print "以下远程分支已完全合并，选择你要删除的远程分支"
-    $merged_on_remote | input list -d '以下远程分支已完全合并，选择你要删除的远程分支' --multi | each {|branch|
-      ^git push --quiet --delete $upstream $branch
+  if ($merge | is-empty) {
+    return
+  }
+
+  let merged_branches = do { ^git for-each-ref --no-color --format='%(refname:short)' --exclude $'refs/remotes/($upstream)/HEAD' --exclude $'refs/remotes/($merge)' --merged $'refs/remotes/origin/HEAD' $'refs/remotes/($upstream)/' }
+  | complete
+  | if ($in.exit_code != 0) {
+      print $'(ansi red)($in.stderr)(ansi reset)'
+      return
+    } else {
+      $in.stdout
     }
+  | lines
+  | if ($in | is-empty) {
+      print '没有已完全合并的远程分支'
+      return
+    } else {
+      $in
+    }
+  | input list --multi $'以下远程分支已完全合并至($merge)，选择你要删除的远程分支'
 
-    # print "以下远程分支已完全合并，将被删除："
-    # $merged_on_remote | each {|| print $"\t($in)" }
-
-    # if ( input --default 'N' "\n继续(y/N)? " | str trim ) == 'y' {
-    #   $merged_on_remote | each {|branch|
-    #     # 删除一个远程分支
-    #     ^git push --quiet --delete $upstream $branch
-    #   }
-    # }
+  if ($merged_branches | is-empty) {
+      print '没有修剪任何远程分支'
+      return
   }
 
-  ^git switch --quiet --no-guess $current_branch
+  do { ^git push $upstream --delete ...($in | str replace $'($upstream)/' '') }
+  | complete
+  | if ($in.exit_code != 0) {
+      print $'(ansi red)($in.stderr)(ansi reset)'
+    } else {
+      print $'(ansi green)已修剪远程分支：(char newline)($in.stdout)(ansi reset)'
+    }
 }
 
-# 对于b的已合并的分支是指那些最后提交节点在b之前或当前的分支，即b是他们的延申
+# 修剪本地分支（即 $'refs/heads' 下的引用）
+export def git-local-branch-cleanup [
+  upstream: string@cmpl-git-remotes = "origin" # 上游远程仓库
+  --fetch # 是否更新本地的远程分支
+  --push # 是否将修剪的本地分支（即 `refs/heads`）推送到远端（若启用该选项，则会同时启用 --fetch）
+  --merge: string@cmpl-git-local-branches # 修剪已完全merge的分支
+  # --keep: list<string> # 要保留的模式列表。若不指定，则使用 git config 中的值
+] : nothing -> nothing {
+  if $fetch or $push {
+    ^git fetch --prune $upstream
+  }
 
-# 获取所有已合并到branch的本地分支（可以使用远程默认分支以防止本地默认分支过时）
-def list_merged [
-  upstream: string   # 上游仓库
-  branch: string     # 分支
-  --remote # 列出远程分支（默认本地）
-  --keep: list<string> # 要保留的模式列表。默认会添加默认分支和 HEAD
-] {
-  let args = [ "--list" "--merged" $"($upstream)/($branch)" ] ++ if $remote {
-      [ '--format' '%(refname:lstrip=3)' '--remote' ]
+  if ($merge | is-empty) {
+    print $'(ansi red)请使用 --merge 参数指定要基于哪个本地分支进行修剪(ansi reset)'
+    return
+  }
+
+  # 获取已合并到指定分支的本地分支列表
+  let merged_branches = do { ^git for-each-ref --no-color --format='%(refname:short)' --exclude $'refs/heads/($merge)' --merged $'refs/heads/($merge)' 'refs/heads/' }
+  | complete
+  | if ($in.exit_code != 0) {
+      print $'(ansi red)($in.stderr)(ansi reset)'
+      return
     } else {
-      [ '--format' '%(refname:lstrip=2)' ]
+      $in.stdout
+    }
+  | lines
+  | if ($in | is-empty) {
+      print '没有已完全合并的本地分支'
+      return
+    } else {
+      $in
+    }
+  | input list --multi $'以下本地分支已完全合并至($merge)，选择你要删除的本地分支'
+
+  if ($merged_branches | is-empty) {
+    print '没有修剪任何本地分支'
+    return
+  }
+
+  # 删除本地分支
+  do { ^git branch --delete ...$merged_branches }
+  | complete
+  | if ($in.exit_code != 0) {
+      print $'(ansi red)($in.stderr)(ansi reset)'
+      return
+    } else {
+      print $'(ansi green)已修剪本地分支：(char newline)($in.stdout)(ansi reset)'
     }
 
-  let keep = ( $keep | append [ "HEAD" $branch ])
-
-  ^git branch ...$args | lines | where {|branch|
-    $keep | all {|pattern| $branch !~ $pattern }
+  if $push {
+    # 如果启用了push选项，先删除远程分支
+    do { ^git push $upstream --delete ...$merged_branches }
+    | complete
+    | if ($in.exit_code != 0) {
+        print $'(ansi red)($in.stderr)(ansi reset)'
+      } else {
+        print $'(ansi green)已修剪远程分支：(char newline)($in.stdout)(ansi reset)'
+      }
   }
 }
