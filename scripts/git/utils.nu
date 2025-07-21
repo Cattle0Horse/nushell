@@ -2,6 +2,11 @@ use complete.nu *
 
 # 对于b的已合并的分支是指那些最后提交节点在b之前或当前的分支，即b是他们的延申
 
+# 判断两个分支是否可以干净地合并（即无冲突）
+export def git-is-merge-cleanly [branch1: string, branch2: string] : nothing -> bool {
+  (do { ^git merge-tree --quiet $branch1 $branch2 } | complete).exit_code == 0
+}
+
 # 获取当前仓库的根目录
 export def git-root [] : nothing -> string {
   ^git rev-parse --show-toplevel
