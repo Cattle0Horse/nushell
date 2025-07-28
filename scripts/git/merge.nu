@@ -1,13 +1,26 @@
+export-env {
+  if 'GIT_MERGE_SQUASH_COMMIT_MESSAGE_TYPE' not-in $env {
+    $env.GIT_MERGE_SQUASH_COMMIT_MESSAGE_TYPE = 'all_commit' # all_commit, no_all_commit, simple_commit
+  }
+}
+
 # Gitlab 式的压缩合并，保留合并动作
 export def git-squash-and-merge [
   from: string
   to?: string  # 目标分支，默认为当前分支
   --squash(-s): string  # 压缩信息（第一个）
+  --all_commit # 包含squash的所有提交信息
   --no_all_commit # 不包含squash的所有提交信息
+  --simple_commit # squash使用简洁的提交信息
+
   --merge(-m): string  # 合并信息（第二个）
   --delete(-d) # 合并后删除分支
   --no_delete # 合并后不删除分支
 ] : nothing -> nothing {
+  if $env.GIT_MERGE_SQUASH_COMMIT_MESSAGE_TYPE not-in ['all_commit' 'no_all_commit' 'simple_commit'] {
+    print $'(ansi red)错误：GIT_MERGE_SQUASH_COMMIT_MESSAGE_TYPE 只能是 all_commit, no_all_commit, simple_commit 三者之一(ansi reset)'
+    return
+  }
   if ($squash | is-empty) {
     print $'(ansi red)错误：必须提供压缩提交的信息 (--squash/-s)(ansi reset)'
     return
@@ -26,12 +39,26 @@ export def git-squash-and-merge [
 
   ^git merge --squash --ff --quiet $from | ignore
 
-  if ($no_all_commit) {
-    print $"(ansi green)使用简洁提交信息: ($squash)(ansi reset)"
+  let squash_commit_message_type = if ($all_commit) {
+    'all_commit'
+  } else if ($no_all_commit) {
+    'no_all_commit'
+  } else if ($simple_commit) {
+    'simple_commit'
+  } else {
+    $env.GIT_MERGE_SQUASH_COMMIT_MESSAGE_TYPE
+  }
+
+  if ($squash_commit_message_type == 'all_commit') {
+    print $"(ansi green)正在构造完整的 squash 提交信息...(ansi reset)"
+    let msg = "Squashed commit of the following:\n\n" + (^git log --reverse --date=iso $'($ancestor_sha)..($from)' --pretty=format:"commit %H%nAuthor: %an <%ae>%nDate: %ad%n%n%B")
+    ^git commit --quiet --message $"($squash)\n\n($msg)"
+  } else if ($squash_commit_message_type == 'no_all_commit') {
+    print $"(ansi green)不包含被 squash 的任何信息: ($squash)(ansi reset)"
     ^git commit --quiet --message $squash
   } else {
-    print $"(ansi green)正在构造完整的 squash 提交信息...（包含所有提交）(ansi reset)"
-    let msg = "Squashed commit of the following:\n\n" + (^git log --reverse --date=iso $'($ancestor_sha)..($from)' --pretty=format:"commit %H%nAuthor: %an <%ae>%nDate: %ad%n%n%B")
+    print $"(ansi green)正在构造简洁的 squash 提交信息...（只包含 subject 和 body）(ansi reset)"
+    let msg = "Squashed commit of the following:\n\n" + (^git log --reverse --date=iso $'($ancestor_sha)..($from)' --pretty=format:"%b")
     ^git commit --quiet --message $"($squash)\n\n($msg)"
   }
 
