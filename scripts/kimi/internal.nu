@@ -64,7 +64,7 @@ export def "kimi-adapter" [ ] : list<any> -> list<record<data: string, usage?: r
       return {next: null}
     }
     let json = ($data | from json).choices.0
-    let out = {data: ($json.delta | get --ignore-errors content | default '')}
+    let out = {data: ($json.delta | get --optional content | default '')}
     if 'usage' in $json {
       return {next: null out: ($out | upsert usage $json.usage)}
     }
