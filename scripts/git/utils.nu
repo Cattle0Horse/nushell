@@ -3,7 +3,7 @@ use complete.nu *
 # 对于b的已合并的分支是指那些最后提交节点在b之前或当前的分支，即b是他们的延申
 
 # 判断两个分支是否可以干净地合并（即无冲突）
-export def git-is-merge-cleanly [branch1: string, branch2: string] : nothing -> bool {
+export def git-is-merge-cleanly [branch1: string@cmpl-git-branches, branch2: string@cmpl-git-branches] : nothing -> bool {
   (do { ^git merge-tree --quiet $branch1 $branch2 } | complete).exit_code == 0
 }
 
@@ -49,7 +49,7 @@ export def git-remotes [] : nothing -> list<string> {
 }
 
 # 获取默认分支名称
-export def git-main-branch [ upstream: string="origin" ] : nothing -> string {
+export def git-main-branch [ upstream: string@cmpl-git-remotes="origin" ] : nothing -> string {
   ^git symbolic-ref --short --quiet $'refs/remotes/($upstream)/HEAD' | split row '/' -n 2 | last
 }
 
