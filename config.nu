@@ -42,3 +42,5 @@ alias cc = code
 alias 'to string' = to json
 # 创建并进入文件夹
 def mc --env [folder: string] : nothing -> nothing { mkdir $folder; cd $folder }
+def time [] : nothing -> string { date now | format date "%Y%m%d%H%M%S" }
+def today [] : nothing -> string { date now | format date "%Y%m%d" }
