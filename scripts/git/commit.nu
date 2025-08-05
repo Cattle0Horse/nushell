@@ -43,13 +43,15 @@ export-env {
   }
 }
 
+const GIT_SCOPES_KEY = 'nushell.scopes'
+const SEPARATOR = '»¦«'
+
 def cmpl-types [] {
   $env.GIT_COMMIT_TYPE
 }
 
 def cmpl-scopes [] : nothing -> list<string> {
-  ^git config get --local --default='' $'nushell.scopes'
-  | split row ' '
+  ^git config get --local --default='' $GIT_SCOPES_KEY | split row $SEPARATOR
 }
 
 def cmpl-emoji-aligns [] : nothing -> list<string> {
@@ -87,6 +89,16 @@ def get-emoji-align [] : nothing -> string {
   } else {
     $align
   }
+}
+
+# 提交修改范围
+export def git-commit-scope [
+  --set(-s): list<string>
+] : nothing -> list<string> {
+  if ($set != null) {
+    ^git config set --local $GIT_SCOPES_KEY ($set | str join $SEPARATOR)
+  }
+  ^git config get --local --default='' $GIT_SCOPES_KEY | split row $SEPARATOR
 }
 
 # 实现规范化提交信息的功能
