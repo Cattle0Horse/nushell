@@ -5,7 +5,7 @@ def extract-env [] : table -> list<string> {
 }
 
 # 重新加载环境变量
-export def --env reload-env [] {
+export def --env reload-path [] {
   let user_path = registry query --hkcu environment | extract-env
   let sys_path = registry query --hklm $SYS_ENV_PATH | extract-env
   $env.path = ($user_path ++ $sys_path ++ $env.path | uniq --ignore-case)
