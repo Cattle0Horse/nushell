@@ -58,14 +58,15 @@ export def git-url-parse [] : [
 @example "Get remote URL" { git-url-remote } --result "https://github.com/nushell/nushell"
 export def git-url-remote [
   repo: string@git-remotes = "origin"
+  --start(-s)
 ] : nothing -> string {
   # 获取远程 URL
   let remote_url = ^git remote get-url $repo | str trim
 
   if ($remote_url =~ "https://") {
-    $remote_url | str replace -r '\.git$' ''
+    $remote_url | str replace -r '\.git$' '' | tee { if $start { start $in } }
   } else if ($remote_url =~ "git@") {
-    ('https://' + ($remote_url | str substring ('git@' | str length).. | str replace ':' '/' | str replace -r '\.git$' ''))
+    ('https://' + ($remote_url | str substring ('git@' | str length).. | str replace ':' '/' | str replace -r '\.git$' '')) | tee { if $start { start $in } }
   } else {
     "Unsupported URL type"
   }
