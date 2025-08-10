@@ -20,6 +20,7 @@ use backup *
 use filesystem *
 use str *
 use subtitle *
+use os/windows *
 
 use bilibili
 use bilibili/alias.nu *
@@ -40,6 +41,8 @@ use completions/docker/docker_zh.nu *
 
 alias cc = code
 alias 'to string' = to json
+# 重启 nushell
+alias reload = exec nu
 # 创建并进入文件夹
 def mc --env [folder: string] : nothing -> nothing { mkdir $folder; cd $folder }
 def time [] : nothing -> string { date now | format date "%Y%m%d%H%M%S" }
