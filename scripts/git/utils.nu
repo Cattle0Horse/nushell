@@ -45,7 +45,7 @@ export def git-is-inside-repo [] : nothing -> bool {
 
 # 获取远程仓库
 export def git-remotes [] : nothing -> list<string> {
-  ^git remote | lines | each { |line| $line | str trim }
+  ^git remote | lines | str trim
 }
 
 # 获取默认分支名称
@@ -65,7 +65,7 @@ export def git-emails [] : nothing -> list<string> {
 
 # 获取本地分支
 export def git-local-branches [] : nothing -> list<string> {
-  ^git for-each-ref --no-color --format='%(refname:short)' refs/heads/
+  ^git for-each-ref --no-color --format='%(refname:short)' refs/heads/ | lines
 }
 # 获取远程分支
 export def git-remote-branches [
@@ -73,9 +73,9 @@ export def git-remote-branches [
   --all(-a)
 ] : nothing -> list<string> {
   if $all {
-    ^git for-each-ref --no-color --format='%(refname:short)' $'refs/remotes/'
+    ^git for-each-ref --no-color --format='%(refname:short)' $'refs/remotes/' | lines
   } else {
-    ^git for-each-ref --no-color --format='%(refname:short)' $'refs/remotes/($upstream)/'
+    ^git for-each-ref --no-color --format='%(refname:short)' $'refs/remotes/($upstream)/' | lines
     # ^git for-each-ref --no-color --format='%(refname:short)' $'refs/remotes/($upstream)/' --exclude $'refs/remotes/($upstream)/HEAD'
   }
 }
