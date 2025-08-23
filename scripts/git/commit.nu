@@ -1,5 +1,5 @@
 export-env {
-  if 'GIT_COMMIT_TYPE' not-in $env {
+  if ($env.GIT_COMMIT_TYPE? | is-empty) {
     $env.GIT_COMMIT_TYPE = [
       [value    description];
       [feat     '新增功能 | 新增了一个功能']
@@ -17,7 +17,7 @@ export-env {
     ]
   }
 
-  if 'GIT_COMMIT_EMOJI' not-in $env {
+  if ($env.GIT_COMMIT_EMOJI? | is-empty) {
     $env.GIT_COMMIT_EMOJI = {
       feat: '✨'
       fix: '🐛'
@@ -34,11 +34,11 @@ export-env {
     }
   }
 
-  if 'GIT_USE_EMOJI' not-in $env {
+  if ($env.GIT_USE_EMOJI? | is-empty) {
     $env.GIT_USE_EMOJI = false
   }
 
-  if 'GIT_EMOJI_ALIGN' not-in $env {
+  if ($env.GIT_EMOJI_ALIGN? | is-empty) {
     $env.GIT_EMOJI_ALIGN = 'center'
   }
 }

@@ -1,7 +1,7 @@
 use complete.nu *
 
 export-env {
-  if 'GIT_BRANCH_CLEANUP_KEEP' not-in $env {
+  if ($env.GIT_BRANCH_CLEANUP_KEEP? | is-empty) {
     # 每个仓库的要求不一样，可以写入仓库等级的 gitconfig 中，但仍应提供一个默认值，当仓库没有配置时，使用该默认值，并提示用户是否写入gitconfig
     $env.GIT_REMOTE_BRANCH_CLEANUP_KEEP = ['release/*']
     $env.GIT_LOCAL_BRANCH_CLEANUP_KEEP = []

@@ -1,5 +1,5 @@
 export-env {
-  if 'GIT_MERGE_SQUASH_COMMIT_MESSAGE_TYPE' not-in $env {
+  if ($env.GIT_MERGE_SQUASH_COMMIT_MESSAGE_TYPE? | is-empty) {
     $env.GIT_MERGE_SQUASH_COMMIT_MESSAGE_TYPE = 'all_commit' # all_commit, no_all_commit, simple_commit
   }
 }

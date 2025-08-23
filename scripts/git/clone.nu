@@ -1,7 +1,7 @@
 use url.nu *
 
 export-env {
-  if 'GIT_CLONE_PROTOCOL' not-in $env {
+  if ($env.GIT_CLONE_PROTOCOL? | is-empty) {
     $env.GIT_CLONE_PROTOCOL = 'ssh' # ssh or https
   }
 }

@@ -2,7 +2,7 @@
 use complete.nu *
 
 export-env {
-  if 'GIT_FLOW' not-in $env {
+  if ($env.GIT_FLOW? | is-empty) {
     $env.GIT_FLOW = {
       branches: {
         dev: dev

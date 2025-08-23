@@ -1,5 +1,5 @@
 export-env {
-  if 'DISPLAY_SWITCH_PATH' not-in $env {
+  if ($env.DISPLAY_SWITCH_PATH? | is-empty) {
     $env.DISPLAY_SWITCH_PATH = 'C:/Windows/System32/DisplaySwitch.exe'
   }
 }

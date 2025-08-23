@@ -1,5 +1,5 @@
 export-env {
-  if 'PROXY' not-in $env {
+  if ($env.PROXY? | is-empty) {
     $env.PROXY = 'http://localhost:7890'
   }
 }
