@@ -1,13 +1,15 @@
+use complete.nu *
+
 export-env {
-  if ($env.GIT_MERGE_SQUASH_COMMIT_MESSAGE_TYPE? | is-empty) {
+  if 'GIT_MERGE_SQUASH_COMMIT_MESSAGE_TYPE' not-in $env {
     $env.GIT_MERGE_SQUASH_COMMIT_MESSAGE_TYPE = 'all_commit' # all_commit, no_all_commit, simple_commit
   }
 }
 
 # Gitlab 式的压缩合并，保留合并动作
 export def git-squash-and-merge [
-  from: string
-  to?: string  # 目标分支，默认为当前分支
+  from: string@cmpl-git-local-branches
+  to?: string@cmpl-git-local-branches  # 目标分支，默认为当前分支
   --squash(-s): string  # 压缩信息（第一个）
   --all_commit # 包含squash的所有提交信息
   --no_all_commit # 不包含squash的所有提交信息
