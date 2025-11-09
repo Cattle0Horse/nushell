@@ -21,6 +21,7 @@ use filesystem *
 use str *
 use subtitle *
 use os/windows *
+use rime *
 
 use bilibili
 use bilibili/alias.nu *
