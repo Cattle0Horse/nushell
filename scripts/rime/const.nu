@@ -37,7 +37,7 @@ export const WEASEL_INSTALL_DIR_REG_KEY = "WeaselRoot"
 export const WEASEL_SERVER_EXECUTABLE_REG_KEY = "ServerExecutable"
 
 # 默认路径
-export const DEFAULT_RIME_USER_DIR = ([$nu.home-path "AppData" "Roaming" "Rime"] | path join)
+export const DEFAULT_RIME_USER_DIR = ([$nu.home-dir "AppData" "Roaming" "Rime"] | path join)
 
 # 缓存文件名生成函数
 export def get-cache-filename [asset_info: record] {
