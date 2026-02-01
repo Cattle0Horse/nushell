@@ -6,6 +6,10 @@ export const SCHEMA_REPO = "rime_wanxiang"
 export const GRAM_REPO = "RIME-LMDG"
 export const GRAM_RELEASE_TAG = "LTS"
 
+# Schema 配置
+export const DEFAULT_SCHEMA_REPO = ""  # 默认 Schema 仓库 URL，用户需要自行设置
+export const DEFAULT_SCHEMA_NAME = "default"  # 默认 Schema 名称
+
 # 模型文件配置
 export const GRAM_MODEL_FILENAME = "wanxiang-lts-zh-hans.gram"
 export const GRAM_KEY_TABLE = {
