@@ -7,6 +7,7 @@ use utils.nu *
 use weasel.nu *
 use download.nu *
 use model.nu *
+use schema.nu *
 
 # ===== 缓存管理命令 =====
 
@@ -101,6 +102,42 @@ export def "rime weasel redeploy" [] : nothing -> bool {
 # 验证小狼毫安装
 export def "rime weasel verify" [] : nothing -> bool {
   verify-weasel-installation
+}
+
+# ===== Schema 管理命令 =====
+
+# 检查 Schema 状态
+export def "rime schema" [
+  --repo-path(-r): string  # Schema 仓库路径（默认使用小狼毫用户目录）
+  --repo-name(-n): string  # 仓库名称（用于记录时间）
+] {
+  check-schema-status --repo-path=$repo_path --repo-name=$repo_name
+}
+
+# 检查 Schema 状态
+export def "rime schema check" [
+  --repo-path(-r): string  # Schema 仓库路径（默认使用小狼毫用户目录）
+  --repo-name(-n): string  # 仓库名称（用于记录时间）
+] {
+  check-schema-status --repo-path=$repo_path --repo-name=$repo_name
+}
+
+# 更新 Schema
+export def "rime schema update" [
+  --repo-path(-r): string  # Schema 仓库路径（默认使用小狼毫用户目录）
+  --repo-name(-n): string  # 仓库名称（用于记录时间）
+  --force(-f)              # 强制更新，即使没有远程更新
+] {
+  update-schema --repo-path=$repo_path --repo-name=$repo_name --force=$force
+}
+
+# 初始化 Schema 仓库
+export def "rime schema init" [
+  repo_url: string         # Git 仓库 URL
+  --target-dir(-t): string # 目标目录（默认使用小狼毫用户目录）
+  --repo-name(-n): string  # 仓库名称（用于记录时间）
+] {
+  init-schema-repo $repo_url --target-dir=$target_dir --repo-name=$repo_name
 }
 
 # ===== 信息命令 =====
