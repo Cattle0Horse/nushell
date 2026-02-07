@@ -16,31 +16,29 @@ do { ^chcp 65001 } | ignore
 # alias 应该在 complete 之后，否则补全不会应用与 alias 的命令
 
 use git *
-use backup *
+# use backup *
 use filesystem *
 use str *
-use subtitle *
 use os/windows *
 use rime *
+# use subtitle *
 
-use bilibili
-use bilibili/alias.nu *
-use kimi
+# use bilibili
+# use bilibili/alias.nu *
+# use kimi
 use link
 use chcp
 
 use completions/scoop/scoop_zh.nu *
 use completions/git/git_zh.nu *
-use completions/docker/docker_zh.nu *
-
-# use completions/whisper-ctranslate2/whisper-ctranslate2_zh.nu *
-# alias whisper = whisper-ctranslate2
-
-# use completions/eza/eza_zh.nu *
-# use eza
-
+use completions/mvn/mvn_zh.nu *
+use completions/pytest/pytest_zh.nu *
+use completions/uv/uv_zh.nu *
+# use completions/docker/docker_zh.nu *
 
 alias cc = code
+alias cs = cursor
+alias docker = podman
 alias 'to string' = to json
 # 重启 nushell
 alias reload = exec nu
