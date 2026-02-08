@@ -31,7 +31,6 @@ use chcp
 
 use completions/scoop/scoop_zh.nu *
 use completions/git/git_zh.nu *
-use completions/mvn/mvn_zh.nu *
 use completions/pytest/pytest_zh.nu *
 use completions/uv/uv_zh.nu *
 # use completions/docker/docker_zh.nu *
