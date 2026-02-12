@@ -1,3 +1,6 @@
+use std/util "path add"
+path add "/home/linuxbrew/.linuxbrew/bin/"
+
 const NU_LIB_DIRS = [
   "~/.config/nushell/scripts"
 ]
@@ -29,3 +32,4 @@ alias reload = exec nu
 def mc --env [folder: string] : nothing -> nothing { mkdir $folder; cd $folder }
 def time [] : nothing -> string { date now | format date "%Y%m%d%H%M%S" }
 def today [] : nothing -> string { date now | format date "%Y%m%d" }
+
