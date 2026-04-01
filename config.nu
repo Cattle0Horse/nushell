@@ -14,6 +14,64 @@ $env.config.buffer_editor = "code"
 # 终端使用 utf-8 字符集
 # do { ^chcp 65001 } | ignore
 
+# 自动激活 Python venv 的函数
+# TODO: 安全校验（信任仓库）
+$env.config = ($env.config | upsert hooks.env_change.PWD [
+  {
+    # 进入包含 .venv 的目录时激活
+    condition: {|_, after|
+      let has_venv = ($after | default "" | path join ".venv/bin/activate.nu" | path exists)
+      let active = (overlay list | where name == "activate" and active == true | length) > 0
+      $has_venv and not $active
+    }
+    code: "overlay use .venv/bin/activate.nu"
+  }
+
+  {
+    # 离开包含 .venv 的目录时退出
+    condition: {|before, after|
+      let was_in_venv = ($before | default "" | path join ".venv/bin/activate.nu" | path exists)
+      let now_in_venv = ($after  | default "" | path join ".venv/bin/activate.nu" | path exists)
+      let active = (overlay list | where name == "activate" and active == true | length) > 0
+      $was_in_venv and not $now_in_venv and $active
+    }
+    code: "overlay hide activate --keep-env [ PWD ]"
+  }
+])
+
+# 外部补全器
+$env.CARAPACE_LENIENT = 1
+let carapace_completer = {|spans|
+  load-env {
+    CARAPACE_SHELL_BUILTINS: (help commands | where category != "" | get name | each { split row " " | first } | uniq | str join "\n")
+    CARAPACE_SHELL_FUNCTIONS: (help commands | where category == "" | get name | each { split row " " | first } | uniq | str join "\n")
+  }
+
+  carapace $spans.0 nushell ...$spans | from json | reject -o style
+}
+
+let external_completer = {|spans|
+  # 展开 alias 以修复 nushell 的 alias 补全 bug
+  let expanded_alias = scope aliases
+    | where name == $spans.0
+    | get -o 0.expansion
+
+  let spans = if $expanded_alias != null {
+    $spans | skip 1 | prepend ($expanded_alias | split row ' ' | take 1)
+  } else { $spans }
+
+  $carapace_completer | do $in $spans
+}
+
+$env.config = ($env.config | merge {
+  completions: {
+    external: {
+      enable: true
+      completer: $external_completer
+    }
+  }
+})
+
 # note: alias 应该在 complete 之后，否则补全不会应用与 alias 的命令
 
 use git *
@@ -46,28 +104,4 @@ alias reload = exec nu
 def mc --env [folder: string] : nothing -> nothing { mkdir $folder; cd $folder }
 def time [] : nothing -> string { date now | format date "%Y%m%d%H%M%S" }
 def today [] : nothing -> string { date now | format date "%Y%m%d" }
-
-# 自动激活 Python venv 的函数
-$env.config = ($env.config | upsert hooks.env_change.PWD [
-  {
-    # 进入包含 .venv 的目录时激活
-    condition: {|_, after|
-      let has_venv = ($after | default "" | path join ".venv/bin/activate.nu" | path exists)
-      let active = (overlay list | where name == "activate" and active == true | length) > 0
-      $has_venv and not $active
-    }
-    code: "overlay use .venv/bin/activate.nu"
-  }
-
-  {
-    # 离开包含 .venv 的目录时退出
-    condition: {|before, after|
-      let was_in_venv = ($before | default "" | path join ".venv/bin/activate.nu" | path exists)
-      let now_in_venv = ($after  | default "" | path join ".venv/bin/activate.nu" | path exists)
-      let active = (overlay list | where name == "activate" and active == true | length) > 0
-      $was_in_venv and not $now_in_venv and $active
-    }
-    code: "overlay hide activate --keep-env [ PWD ]"
-  }
-])
 
