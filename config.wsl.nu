@@ -1,9 +1,9 @@
 use std/util "path add"
 path add "/home/linuxbrew/.linuxbrew/bin/"
 path add "/home/linuxbrew/.linuxbrew/sbin/"
-path add "~/.local/bin"
-path add "/mnt/c/Users/<your name>/AppData/Local/Programs/Microsoft VS Code/bin/code"
-path add "/mnt/c/Users/<your name>/scoop/apps/cursor/cursor/resources/app/bin/cursor"
+path add "~/.local/bin/"
+path add "/mnt/c/Users/<your name>/AppData/Local/Programs/Microsoft VS Code/bin/"
+path add "/mnt/c/Users/<your name>/scoop/apps/cursor/cursor/resources/app/bin/"
 
 const NU_LIB_DIRS = [
   "~/.config/nushell/scripts"
