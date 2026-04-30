@@ -2,6 +2,8 @@
 
 # markdown toolkit
 export extern "mdtk" [
+  command?: string@[]
+
   --version # 显示版本
   --help(-h) # 显示帮助
 ]
