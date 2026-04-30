@@ -29,8 +29,6 @@ export extern "mdtk read" [
   url: string@[] # 待抓取的 URL
   --json # 输出结构化 JSON 而非 markdown+frontmatter
   --output(-o): path # 写入文件而非 stdout
-  --timeout(-t): number # HTTP 超时秒，默认 30.0，≥0.1
-  --no-auth # 即使设置了 JINA_API_KEY 也不发送
   --verbose(-v) # 详细输出
   --help(-h) # 显示帮助
 ]
