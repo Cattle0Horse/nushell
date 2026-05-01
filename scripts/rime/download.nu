@@ -60,7 +60,7 @@ export def check-cache [
         let cached_metadata = ($metadata | get $cache_filename)
         let cached_time = ($cached_metadata.updated_at | into datetime)
         let remote_time = ($asset_info.updated_at | into datetime)
-
+        
         if $remote_time > $cached_time {
           print $"(ansi yellow)发现新版本，缓存已过期，将重新下载(ansi reset)"
           print $"缓存时间: ($cached_time)"

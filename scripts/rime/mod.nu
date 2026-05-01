@@ -87,16 +87,14 @@ export def "rime weasel stop" [] : nothing -> bool {
   stop-weasel-server
 }
 
-# 重启小狼毫服务
-export def "rime weasel restart" [] : nothing -> bool {
-  stop-weasel-server
-  sleep 2sec
-  start-weasel-server
-}
-
 # 重新部署小狼毫
 export def "rime weasel redeploy" [] : nothing -> bool {
   redeploy-weasel
+}
+
+# 同步用户资料
+export def "rime weasel sync" [] : nothing -> bool {
+  sync-user-data-weasel
 }
 
 # 验证小狼毫安装

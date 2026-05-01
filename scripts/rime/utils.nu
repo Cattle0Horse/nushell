@@ -269,3 +269,24 @@ export def safe-copy-file [source: string, destination: string] {
 
   return false
 }
+
+# 从注册表获取值
+export def get-registry-value [reg_path: string, reg_key: string] {
+  try {
+    let result = (^reg query $reg_path /v $reg_key | complete)
+    if $result.exit_code == 0 {
+      let lines = ($result.stdout | lines)
+      let value_line = ($lines | where {|line| $line | str contains $reg_key} | first)
+      if ($value_line | is-not-empty) {
+        # 解析注册表输出格式: "  RimeUserDir  REG_SZ  C:\Users\..."
+        let parts = ($value_line | str trim | split row -r '\s+')
+        if ($parts | length) >= 3 {
+          return ($parts | skip 2 | str join " ")
+        }
+      }
+    }
+    return null
+  } catch {
+    return null
+  }
+}

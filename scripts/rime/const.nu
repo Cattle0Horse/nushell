@@ -1,4 +1,5 @@
 # Rime 配置常量
+# https://cnb.cool/amzxyz/rime-wanxiang 国内镜像
 
 # GitHub 源配置
 export const SCHEMA_OWNER = "amzxyz"
@@ -34,14 +35,19 @@ export const GITHUB_API_HEADERS = {
 }
 
 # 小狼毫注册表路径
+# 用户数据（方案配置等）
 export const WEASEL_USER_DIR_REG_PATH = 'HKCU\Software\Rime\Weasel'
-export const WEASEL_USER_DIR_REG_KEY = "RimeUserDir"
-export const WEASEL_INSTALL_DIR_REG_PATH = 'HKLM\SOFTWARE\WOW6432Node\Rime\Weasel'
-export const WEASEL_INSTALL_DIR_REG_KEY = "WeaselRoot"
-export const WEASEL_SERVER_EXECUTABLE_REG_KEY = "ServerExecutable"
-
-# 默认路径
+export const WEASEL_USER_DIR_REG_KEY = "RimeUserDir" # 数据文件夹路径
+# 默认用户数据目录
 export const DEFAULT_RIME_USER_DIR = ([$nu.home-dir "AppData" "Roaming" "Rime"] | path join)
+# 小狼毫服务端
+export const WEASEL_INSTALL_DIR_REG_PATH = 'HKLM\SOFTWARE\WOW6432Node\Rime\Weasel'
+export const WEASEL_INSTALL_DIR_REG_KEY = "WeaselRoot" # 安装目录
+# 可执行文件名
+export const WEASEL_DEPLOY_EXE_NAME = 'WeaselDeployer.exe'
+export const WEASEL_SERVER_EXE_NAME = 'WeaselServer.exe'
+export const WEASEL_SETUP_EXE_NAME = 'WeaselSetup.exe'
+
 
 # 缓存文件名生成函数
 export def get-cache-filename [asset_info: record] {
@@ -51,3 +57,4 @@ export def get-cache-filename [asset_info: record] {
   let basename = ($name_parts | drop | str join ".")
   return $"($basename)_($timestamp).($extension)"
 }
+
