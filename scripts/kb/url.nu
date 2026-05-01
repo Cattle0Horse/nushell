@@ -34,11 +34,8 @@ def url-slug [url: string]: nothing -> string {
 export def "kb url" [
   url: string # 目标文章 URL
   --force(-f) # 若目标文件存在则覆盖
-  --timeout(-t): number = 30.0 # HTTP 超时秒
-  --no-auth # 透传给 mdtk read，禁用 JINA_API_KEY
 ] : nothing -> path {
-  let extra = if $no_auth { ["--no-auth"] } else { [] }
-  let result = (^mdtk read --json --timeout $timeout ...$extra $url | from json)
+  let result = (^mdtk read --json $url | from json)
 
   let domain = ($result.source.domain? | default '' | sanitize)
   if ($domain | is-empty) {
